@@ -32,20 +32,21 @@ def build_doc2vec(sentences, size, word2vec_model):
             continue
     if count != 0:
         vec /= count
+    vec = scale(vec)  # 归一化
     return vec
 
 
 def text_vecs(x_train, x_test, n_dim, word2vec_model):
     # 训练集文本向量
-    train_vecs = np.concatenate([build_doc2vec(z, n_dim, word2vec_model) for z in x_train])
-    train_vecs = scale(train_vecs)  # 归一化
+    train_vectors = np.concatenate([build_doc2vec(z, n_dim, word2vec_model) for z in x_train])
+    train_vectors = scale(train_vectors)  # 归一化
+
     # 测试集处理
+    word2vec_model.train(x_test)  # 测试集词向量模型在线训练
+    test_vectors = np.concatenate([build_doc2vec(z, n_dim, word2vec_model) for z in x_test])
+    test_vectors = scale(test_vectors)
 
-    word2vec_model.train(x_test)
-    test_vecs = np.concatenate([build_doc2vec(z, n_dim, word2vec_model) for z in x_test])
-    test_vecs = scale(test_vecs)
-
-    res = (train_vecs, test_vecs)
+    res = (train_vectors, test_vectors)
     return res
 
 
