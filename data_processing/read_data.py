@@ -5,8 +5,8 @@
 # 功能：
 # Author: zx
 # Software: PyCharm Community Edition
-# File: main.py
-# Time: 16-11-24 上午9:55
+# File: read_data.py
+# Time: 16-12-1 下午3:22
 # -------------------------------------------
 import os
 import json
@@ -18,20 +18,20 @@ reload(sys)
 sys.setdefaultencoding('utf8')
 
 
-def read_all():
-    data_path = "/home/zhangxin/work/sentimentData"
+# 解析所有的json文件
+def read_all_map():
+    data_path = "/home/zhangxin/work/sentimentData_xueqiu"
     data_all_list = os.listdir(data_path)
     print len(data_all_list)
-    data_all_map = {}
-    for i in range(30000):
+    data_all_map = {}  # [stock , [评论_1, 评论_2, ... 评论_n]]
+    data_all = []  # 所有的评论
+    for i in range(100000):
         temp = data_path + "/" + data_all_list[i]
 
         data = read_doc(temp)
         for d in data:
-            # print d.get_id
-            # print d.get_content
-            # print d.get_stock
-            # print "\n"
+
+            # 处理:<股票 评论集合>
             if data_all_map.keys().__contains__(d.get_stock):
                 temp_1 = data_all_map[d.get_stock]
                 temp_1.append(d)
@@ -40,23 +40,30 @@ def read_all():
                 temp_1 = [d]
                 data_all_map[d.get_stock] = temp_1
 
-    # 打印股票及对应的评论
-    print "[总共股票] ", len(data_all_map)
-    # for sk in data_all_map.keys():
-    #     print "[", sk, "]"
-    #     count = 1
-    #     for c in data_all_map[sk]:
-    #         print "  [", count, "]", c
-    #         count += 1
+            data_all.append(d)
+    return data_all_map
 
-    temp_sh600537 = data_all_map["SH600537"]
-    print "[SH600537]"
+
+# 解析指定数目的json文件
+def read_all(n):
+    data_path = "/home/zhangxin/work/sentimentData_xueqiu"
+    data_all_list = os.listdir(data_path)
+    print "[文件总共]", len(data_all_list)
+    data_all = []  # 所有的评论
     count = 1
-    for c in temp_sh600537:
-        print "  [", count, "]", "[", timestamp.stamp_2_time(c.get_time), "]", c.get_content
+    for i in range(n):
+        print "[读取_还剩下]", n - count
         count += 1
+        temp = data_path + "/" + data_all_list[i]
+
+        data = read_doc(temp)
+        for d in data:
+            data_all.append(d)
+
+    return data_all
 
 
+# 解析单个json文件
 def read_doc(doc):
     result = []
     # 普通读取
@@ -73,9 +80,5 @@ def read_doc(doc):
 
         com = comment.Comment(id, content, reply, title, time, stock)
         result.append(com)
-
+    data.close()
     return result
-
-
-if __name__ == "__main__":
-    read_all()
