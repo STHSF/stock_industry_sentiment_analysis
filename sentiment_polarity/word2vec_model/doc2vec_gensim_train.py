@@ -52,7 +52,7 @@ def text_vecs(x_train, x_test, n_dim, word2vec_model):
 
 # 训练集转向量空间模型
 def text_vecs_zx():
-    w2v_model = Word2Vec.load(globe.model_path)
+    w2v_model = Word2Vec.load(globe.w2c_model_path)
     train_data = globe.train_data
     doc_vec = []
     for d in train_data:
@@ -90,7 +90,7 @@ def doc_vecs_zx(doc, word2vec_model):
 
 
 def model_load_test():
-    model_path = globe.model_path
+    model_path = globe.w2c_model_path
     w2c_model = Word2Vec.load(model_path)
 
     print '[中国] ', " ".join([word[0] for word in w2c_model.most_similar("中国")])
