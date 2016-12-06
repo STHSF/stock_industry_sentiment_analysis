@@ -9,7 +9,6 @@ build word2vec model
 from gensim.models import Word2Vec
 from multiprocessing import cpu_count
 from data_prepare import data_processing
-import data_prepare
 import logging
 import globe
 import sys

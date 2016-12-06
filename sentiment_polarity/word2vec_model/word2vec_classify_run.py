@@ -5,7 +5,7 @@ from sklearn.linear_model import SGDClassifier
 from sklearn.metrics import roc_curve, auc
 import matplotlib.pyplot as plt
 import globe
-import data_prepare
+from data_prepare import data_processing
 import word2vec_gensim_model
 import word2vec_gensim_train
 
@@ -14,18 +14,18 @@ import word2vec_gensim_train
 pos_file_path = globe.pos_file_path
 neg_file_path = globe.neg_file_path
 
-tmp = data_prepare.read_data(pos_file_path, neg_file_path)
-res = data_prepare.data_split(tmp[0], tmp[1])
+tmp = data_processing.read_data(pos_file_path, neg_file_path)
+res = data_processing.data_split(tmp[0], tmp[1])
 x_train = res[0]
 x_test = res[1]
 label_train = res[2]
 label_test = res[3]
-x_train = data_prepare.text_clean(x_train)
-x_test = data_prepare.text_clean(x_test)
+x_train = data_processing.text_clean(x_train)
+x_test = data_processing.text_clean(x_test)
 
 # 生成文本向量
 n_dim = globe.n_dim
-# model_path = '/home/zhangxin/work/workplace_python/DeepNaturalLanguageProcessing/DeepNLP/word2vecmodel/mymodel'
+# word2vec model path
 model_path = globe.model_path
 
 word2vec_model = Word2Vec.load(model_path)

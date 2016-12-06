@@ -32,26 +32,27 @@ def build_doc2vec(sentences, size, word2vec_model):
             continue
     if count != 0:
         vec /= count
+    vec = scale(vec)  # 归一化
     return vec
 
 
 def text_vecs(x_train, x_test, n_dim, word2vec_model):
     # 训练集文本向量
-    train_vecs = np.concatenate([build_doc2vec(z, n_dim, word2vec_model) for z in x_train])
-    train_vecs = scale(train_vecs)  # 归一化
+    train_vectors = np.concatenate([build_doc2vec(z, n_dim, word2vec_model) for z in x_train])
+    train_vectors = scale(train_vectors)  # 归一化
+
     # 测试集处理
+    word2vec_model.train(x_test)  # 测试集词向量模型在线训练
+    test_vectors = np.concatenate([build_doc2vec(z, n_dim, word2vec_model) for z in x_test])
+    test_vectors = scale(test_vectors)
 
-    word2vec_model.train(x_test)
-    test_vecs = np.concatenate([build_doc2vec(z, n_dim, word2vec_model) for z in x_test])
-    test_vecs = scale(test_vecs)
-
-    res = (train_vecs, test_vecs)
+    res = (train_vectors, test_vectors)
     return res
 
 
 # 训练集转向量空间模型
 def text_vecs_zx():
-    w2v_model = Word2Vec.load(globe.model_path)
+    w2v_model = Word2Vec.load(globe.w2c_model_path)
     train_data = globe.train_data
     doc_vec = []
     for d in train_data:
@@ -89,7 +90,7 @@ def doc_vecs_zx(doc, word2vec_model):
 
 
 def model_load_test():
-    model_path = globe.model_path
+    model_path = globe.w2c_model_path
     w2c_model = Word2Vec.load(model_path)
 
     print '[中国] ', " ".join([word[0] for word in w2c_model.most_similar("中国")])
