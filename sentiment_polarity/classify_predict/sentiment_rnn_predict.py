@@ -22,7 +22,7 @@ batch_size = 1
 n_inputs = 200  # data input size，输入层神经元
 n_steps = 1  # globe.n_dim  # time steps， w2v 维度
 n_hidden_units = 200  # neurons in hidden layer，隐藏层神经元个数
-n_classes = 2  # classes 二分类
+n_classes = globe.num_classes  # classes 分类数
 
 # tf Graph input
 x = tf.placeholder(tf.float32, [None, n_steps, n_inputs])
@@ -100,6 +100,7 @@ accuracy = tf.reduce_mean(tf.cast(correct_predict, tf.float32))
 saver = tf.train.Saver()
 
 with tf.Session() as sess:
+    #
     saver.restore(sess, globe.model_rnn_path)
 
     data = input_data.read_data_sets_predict()

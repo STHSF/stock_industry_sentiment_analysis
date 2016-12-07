@@ -32,11 +32,19 @@ def build_doc2vec(sentences, size, word2vec_model):
             continue
     if count != 0:
         vec /= count
-    vec = scale(vec)  # 归一化
+    # vec = scale(vec, axis=1)  # 归一化
     return vec
 
 
-def text_vecs(x_train, x_test, n_dim, word2vec_model):
+def doc_vectors(x_train, x_test, n_dim, word2vec_model):
+    """
+    为分类准备数据
+    :param x_train:
+    :param x_test:
+    :param n_dim:
+    :param word2vec_model:
+    :return:
+    """
     # 训练集文本向量
     train_vectors = np.concatenate([build_doc2vec(z, n_dim, word2vec_model) for z in x_train])
     train_vectors = scale(train_vectors)  # 归一化
@@ -92,14 +100,18 @@ def doc_vecs_zx(doc, word2vec_model):
 def model_load_test():
     model_path = globe.w2c_model_path
     w2c_model = Word2Vec.load(model_path)
+    cc = w2c_model["中国"]
+    print cc
+    aa = doc_vecs_zx("中国", w2c_model)
+    print aa
 
-    print '[中国] ', " ".join([word[0] for word in w2c_model.most_similar("中国")])
-    print '[万科] ', " ".join([word[0] for word in w2c_model.most_similar("万科")])
-    print '[猪肉] ', " ".join([word[0] for word in w2c_model.most_similar("猪肉")])
-    print '[股市] ', " ".join([word[0] for word in w2c_model.most_similar("股市")])
-    print '[涨] ', " ".join([word[0] for word in w2c_model.most_similar("涨")])
-    print '[地产] ', " ".join([word[0] for word in w2c_model.most_similar("地产")])
-    print '[基金] ', " ".join([word[0] for word in w2c_model.most_similar("基金")])
+    # print '[中国] ', " ".join([word[0] for word in w2c_model.most_similar("中国")])
+    # print '[万科] ', " ".join([word[0] for word in w2c_model.most_similar("万科")])
+    # print '[猪肉] ', " ".join([word[0] for word in w2c_model.most_similar("猪肉")])
+    # print '[股市] ', " ".join([word[0] for word in w2c_model.most_similar("股市")])
+    # print '[涨] ', " ".join([word[0] for word in w2c_model.most_similar("涨")])
+    # print '[地产] ', " ".join([word[0] for word in w2c_model.most_similar("地产")])
+    # print '[基金] ', " ".join([word[0] for word in w2c_model.most_similar("基金")])
 
 
 if __name__ == "__main__":
