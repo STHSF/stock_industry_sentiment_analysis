@@ -71,6 +71,7 @@ min_count = 2
 
 pos_file_path = '/Users/li/workshop/DataSet/sentiment/train/result_pos.txt'
 neg_file_path = '/Users/li/workshop/DataSet/sentiment/train/result_neg.txt'
+neu_file_path = '/Users/li/workshop/DataSet/sentiment/train/result_neg.txt'
 
 # pos_file_path = '/home/zhangxin/work/workplace_python/DeepSentiment/data/train/result_pos.txt'
 # neg_file_path = '/home/zhangxin/work/workplace_python/DeepSentiment/data/train/result_neg.txt'
