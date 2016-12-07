@@ -14,8 +14,7 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
 
-
-# logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
+logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 
 
 # sentencestest = [['中国', '人'], ['美国', '人']]
@@ -52,6 +51,20 @@ class MySentences(object):
             yield line.split(",")
 
 
+def read_source_data(file_path):
+    """
+    读取文本文件，文本已经进行分词且词之间用逗号隔开。
+    :param file_path:
+    :return:
+    """
+    with open(file_path) as input_file:
+        file_content = input_file.readlines()
+        temp = []
+        for row in file_content:
+            temp.append(row.decode("utf-8").split(","))
+    return file_content
+
+
 # 按照标签读取数据
 def read_data(pos_file_path, neg_file_path):
     with open(pos_file_path) as input_file:
@@ -70,21 +83,26 @@ def read_data(pos_file_path, neg_file_path):
     return res
 
 
-# 数据预处理,设置标签,训练集测试集准备
-def data_split(pos_file, neg_file):
-    # 标签
-    label = np.concatenate((np.ones(len(pos_file)), np.zeros(len(neg_file))))
-
-    # 训练集,测试集
-    train_data, test_data, train_labels, test_labels = train_test_split(np.concatenate((pos_file, neg_file)), label,
-                                                                        test_size=0.5)
-
+def data_split(pos_file, neu_file, neg_file):
+    """
+    数据预处理,设置训练集和测试集的标签, 训练集测试集准备
+    :param neu_file:
+    :param pos_file:
+    :param neg_file:
+    :return:
+    """
+    # 设置标签
+    label = np.concatenate((np.ones(len(pos_file)), np.zeros(len(neu_file)), 1 + np.ones(len(neg_file))))
+    # 从训练集中抽取一部分数据作为测试集，即将原始数据分成训练集和测试集两部分。
+    train_data, test_data, train_labels, test_labels = train_test_split(np.concatenate((pos_file, neu_file, neg_file)),
+                                                                        label,
+                                                                        test_size=0.1)
     res = (train_data, test_data, train_labels, test_labels)
     return res
 
 
 def text_clean(corpus):
-    corpus = [z.lower().replace('\n', ' ').split(',') for z in corpus]
+    corpus = [z.lower().strip().replace('\n', ' ').split(',') for z in corpus]
     return corpus
 
 
@@ -98,4 +116,7 @@ def do():
 
 
 if __name__ == "__main__":
-    do()
+    # do()
+    re = read_source_data('/Users/li/workshop/DataSet/sentiment/train/test.txt')
+    for i in re[1]:
+        print i,

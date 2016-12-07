@@ -42,7 +42,7 @@ def word2vec_test_zx():
     n_dim = globe.n_dim
     min_count = 2
     model = built_word2vec_model(sentence_process, n_dim, min_count)
-    model.save(globe.model_path)
+    model.save(globe.w2c_model_path)
 
 
 def word2vec_test():
@@ -50,28 +50,34 @@ def word2vec_test():
     # 读入数据
     pos_file_path = globe.pos_file_path
     neg_file_path = globe.neg_file_path
+    neu_file_path = globe.neu_file_path
+    neu_data = data_processing.read_source_data(neu_file_path)
 
-    tmp = data_processing.read_data(pos_file_path, neg_file_path)
-    res = data_processing.data_split(tmp[0], tmp[1])
+    pos_data = data_processing.read_source_data(pos_file_path)
+    neg_data = data_processing.read_source_data(neg_file_path)
+
+    # tmp = data_processing.read_data(pos_file_path, neg_file_path)
+    res = data_processing.data_split(pos_data, neu_data, neg_data)
     x_train = res[0]
     x_train = data_processing.text_clean(x_train)
     n_dim = 200
     min_count = 2
-
     model = built_word2vec_model(x_train, n_dim, min_count)
+    model.save(globe.w2c_model_path)  # save model
 
     try:
-        var = model.similarity('油价', '原油')
-        print var
-        res = model.most_similar("油价")
-        for i in res:
-            print i[0],
-
-        print('\n')
-        dd = model.most_similar("原油")
-        for i in dd:
-            print i[0],
-
+        # var = model.similarity('油价', '原油')
+        # print var
+        # res = model.most_similar("油价")
+        # for i in res:
+        #     print i[0],
+        #
+        # print('\n')
+        # dd = model.most_similar("原油")
+        # for i in dd:
+        #     print i[0],
+        cc = model["原油"]
+        print cc
     except KeyError:
         print("kkk")
 
@@ -80,16 +86,3 @@ if __name__ == "__main__":
     word2vec_test()
 
     # word2vec_test_zx()
-
-    # pos_file_path = globe.file_pos
-    # neg_file_path = globe.file_neg
-    # tmp = data_prepare.read_data(pos_file_path, neg_file_path)
-    # res = data_prepare.data_split(tmp[0], tmp[1])
-    # x_train = res[0]
-    # x_train = data_prepare.text_clean(x_train)
-    #
-    # n_dim = 200
-    # min_count = 2
-    # model_path = globe.model_path
-    # mymodel = built_word2vec_model(x_train, n_dim, min_count)
-    # mymodel.save(model_path)

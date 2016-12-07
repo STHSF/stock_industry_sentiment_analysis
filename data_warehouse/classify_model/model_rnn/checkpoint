@@ -1,0 +1,2 @@
+model_checkpoint_path: "/Users/li/workshop/MyRepository/stock_industry_sentiment_analysis/data_warehouse/classify_model/model_rnn/model.ckpt"
+all_model_checkpoint_paths: "/Users/li/workshop/MyRepository/stock_industry_sentiment_analysis/data_warehouse/classify_model/model_rnn/model.ckpt"

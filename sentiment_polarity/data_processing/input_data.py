@@ -2,16 +2,16 @@
 
 import logging
 import numpy as np
-from data_prepare import corpus
+from data_prepare import corpus, data_processing
 from gensim.models import Word2Vec
 from tensorflow.contrib.learn.python.learn.datasets import base
-from sentiment_polarity.word2vec_model import word2vec_gensim_train
-from sentiment_polarity.data_processing import data_processing, globe
+from sentiment_polarity.word2vec_model import doc2vec_gensim_train
+from sentiment_polarity.data_processing import globe
 
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 
 
-def _data_read(pos_file_path, neg_file_path, w2c_model_path):
+def _data_read(pos_file_path, neg_file_path, neu_file_path, w2c_model_path):
     """read data and word2vec model from file path, 并构造文本向量
     Args:
         pos_file_path: Positive file path.
@@ -22,8 +22,13 @@ def _data_read(pos_file_path, neg_file_path, w2c_model_path):
     Raises:
         IOError: An error occurred accessing the bigtable.Table object.
     """
-    tmp = data_processing.read_data(pos_file_path, neg_file_path)
-    res = data_processing.data_split(tmp[0], tmp[1])
+    pos_data = data_processing.read_source_data(pos_file_path)
+    neg_data = data_processing.read_source_data(neg_file_path)
+    neu_data = data_processing.read_source_data(neu_file_path)
+
+    res = data_processing.data_split(pos_data, neu_data, neg_data)
+    # tmp = data_processing.read_data(pos_file_path, neg_file_path)
+    # res = data_processing.data_split(tmp[0], tmp[1])
     (train_data, test_data, train_labels, test_labels) = (res[0], res[1], res[2], res[3])
 
     # print train_labels[0]
@@ -37,7 +42,7 @@ def _data_read(pos_file_path, neg_file_path, w2c_model_path):
         # load word2vec model from model path
         word2vec_model = Word2Vec.load(w2c_model_path)
         # 生成文本向量空间
-        doc_vectors = word2vec_gensim_train.text_vecs(train_data, test_data, n_dim, word2vec_model)
+        doc_vectors = doc2vec_gensim_train.doc_vectors(train_data, test_data, n_dim, word2vec_model)
     except IOError:
         pass
 
@@ -76,7 +81,7 @@ def dense_to_one_hot(labels_dense, num_classes):
     return labels_one_hot
 
 
-def extract_labels(labels, one_hot=False, num_classes=2):
+def extract_labels(labels, one_hot=False, num_classes=globe.num_classes):
     """Extract the labels into a 1D uint8 numpy array [index]."""
     # print labels.shape
     if one_hot:
@@ -164,28 +169,10 @@ def read_data_sets():
     # 读入数据
     pos_file_path = globe.pos_file_path
     neg_file_path = globe.neg_file_path
+    neu_file_path = globe.neu_file_path
     w2c_model_path = globe.model_path
 
-    # train_data = '/Users/li/workshop/DataSet/sentiment/train/result_pos.txt'
-    # train_labels = '/Users/li/workshop/DataSet/sentiment/train/result_pos.txt'
-    # test_data = '/Users/li/workshop/DataSet/sentiment/train/result_pos.txt'
-    # test_labels = '/Users/li/workshop/DataSet/sentiment/train/result_pos.txt'
-    #
-    # train_data = base.load_csv_without_header(train_data, train_dir,
-    #                                           features_dtype=tf.float32)
-    #
-    # train_labels_file = base.load_csv_without_header(train_labels, train_dir,
-    #                                                  features_dtype=tf.float32)
-    #
-    # train_labels = extract_labels(train_labels_file, one_hot=one_hot)
-    #
-    # test_data = base.load_csv_without_header(test_data, train_dir,
-    #                                          features_dtype=tf.float32)
-    # test_labels_file = base.load_csv_without_header(test_labels, train_dir,
-    #                                                 features_dtype=tf.float32)
-    # test_labels = extract_labels(test_labels_file, one_hot=one_hot)
-
-    raw_data = _data_read(pos_file_path, neg_file_path, w2c_model_path)
+    raw_data = _data_read(pos_file_path, neg_file_path, neu_file_path, w2c_model_path)
 
     train_data = raw_data[0]
     # train_label = np.reshape(raw_data[1], (raw_data[1].shape[0],))
@@ -232,7 +219,7 @@ def read_data_sets_predict():
             # print '【正文】', file_seg[title]
 
             doc = file_seg[title]
-            doc_vec = word2vec_gensim_train.doc_vecs_zx(doc, word2vec_model)
+            doc_vec = doc2vec_gensim_train.doc_vecs_zx(doc, word2vec_model)
             # text_vectors.append(doc_vec)
             text_vectors[title] = doc_vec
     except IOError:

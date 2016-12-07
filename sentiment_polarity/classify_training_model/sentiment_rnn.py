@@ -5,7 +5,7 @@
 情感极性分析
 """
 from sentiment_polarity.data_processing import input_data
-
+from data_prepare import data_processing
 import matplotlib.pyplot as plt
 import tensorflow as tf
 import globe
@@ -25,7 +25,7 @@ batch_size = 100
 embeding_size = globe.n_dim  # data input size，输入层神经元
 n_steps = 1   # time steps
 n_hidden_units = 200  # neurons in hidden layer，隐藏层神经元个数
-n_classes = 2  # classes 二分类
+n_classes = globe.num_classes  # classes 分类数
 
 # tf Graph input
 x = tf.placeholder(tf.float32, [None, n_steps, embeding_size])
@@ -134,17 +134,26 @@ with tf.Session() as sess:
     # test accuracy
     test_step = 0
     test_accuracy = []
+    pre = []
     while test_step * batch_size < 10000:
         test_batch_xs, test_batch_ys = training_data.test.next_batch(batch_size)
         test_batch_xs = test_batch_xs.reshape([batch_size, n_steps, embeding_size])
         test_acc = sess.run(accuracy, feed_dict={x: test_batch_xs, y: test_batch_ys})
-        test_accuracy.append(test_acc)
-        print "test_acc:", test_acc, "%"
-        test_step += 1
+        result = sess.run([predict], feed_dict={x: test_batch_xs})
 
-    # 模型保存
-    # saver_path = saver.save(sess, globe.model_rnn_path)
-    # print "Model saved in file: ", saver_path
+        # 测试标签和预测标签输出
+        for i in range(batch_size):
+            print result[0][i].argmax(), test_batch_ys[i]
+
+        test_accuracy.append(test_acc)
+        print "test_acc:", test_acc
+        test_step += 1
+    avg_test_acc = sum(test_accuracy) / len(test_accuracy)
+    print "avg_test_acc: ", avg_test_acc
+
+    """模型保存"""
+    saver_path = saver.save(sess, globe.model_rnn_path)
+    print "Model saved in file: ", saver_path
 
     # plot train accuracy
     fig = plt.figure()
@@ -153,7 +162,7 @@ with tf.Session() as sess:
     lines = ax.plot(acc_array, '.', label='train accuracy')
     lines2 = ax.plot(test_accuracy, '-', label='test accuracy')
     plt.xlabel("Iters")
-    plt.ylabel("Accuracy(%)")
+    plt.ylabel("Accuracy")
     plt.grid(True)
     plt.legend(bbox_to_anchor=(1.0, 1), loc=1, borderaxespad=0.)
     plt.show()

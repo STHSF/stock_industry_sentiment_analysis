@@ -1,88 +1,57 @@
 #!/usr/bin/env python
 # encoding: utf-8
-# -*- coding:utf-8 -*-
 
 # -------------------------------------------
 # 功能：
 # Author: zx
 # Software: PyCharm Community Edition
-# File: stanford_parser.py
-# Time: 16-12-5 上午11:30
+# File: stanford_parser_2.py
+# Time: 16-12-7 下午2:25
 # -------------------------------------------
 import sys
+from nltk.tree import Tree
+
 reload(sys)
 sys.setdefaultencoding("utf-8")
-import chardet
 
-# 3
-import os
-from nltk.parse import stanford
-
-#添加stanford环境变量,此处需要手动修改，jar包地址为绝对地址。
-os.environ['STANFORD_PARSER'] = '/home/zhangxin/work/stanford/jars/stanford-parser.jar'
-os.environ['STANFORD_MODELS'] = '/home/zhangxin/work/stanford/jars/stanford-parser-3.6.0-models.jar'
+import nltk
+from nltk.parse.stanford import StanfordParser
+from nltk.parse.stanford import StanfordDependencyParser
 
 
-#为JAVAHOME添加环境变量
-# java_path = "C:/Program Files (x86)/Java/jdk1.8.0_11/bin/java.exe"
-# os.environ['JAVAHOME'] = java_path
+# 句法分析
+def parser(sentence):
+    chi_parser = StanfordParser(path_to_jar=u"/home/zhangxin/work/stanford/jars/stanford-parser.jar",
+                                path_to_models_jar=u"/home/zhangxin/work/stanford/jars/stanford-parser-3.6.0-models.jar",
+                                model_path=u"/home/zhangxin/work/stanford/jars/edu/chinesePCFG.ser.gz")
+    re = chi_parser.parse(sentence.split())
 
-#句法标注
-parser = stanford.StanfordParser(model_path=u"/home/zhangxin/work/stanford/jars/edu/chinesePCFG.ser.gz")
+    for r in re:
+        print type(r)
+        r.pprint()  # 打印树
+        r.draw()  # 画图
 
-parser = stanford.StanfordParser(model_path=u"/home/zhangxin/work/stanford/jars/edu/englishPCFG.ser.gz")
-
-# sentences = parser.parse_sents("我爱中国,我爱坤艳.".split(), "What is your name?".split())
-# sentences = parser.parse_sents("我爱中国,我爱坤艳.".decode("utf-8").split())
-# s = unicode("我爱中国")
-s = "hello, everyone , i love china"
-# print chardet.detect(s)
-sentences = parser.parse_sents(s.split())
-for s in sentences:
-    print s
-    for ss in s:
-        print ss
-        for sss in ss:
-            print sss
-
-# GUI
-# for sentence in sentences:
-#     sentence.draw()
-
-# 2
-# from nltk.parse import stanford
-# parser=stanford.StanfordParser(model_path="edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz")
-# list(parser.raw_parse("the quick brown fox jumps over the lazy dog"))
+        # 打印label
+        # for subtree in r.subtrees():
+        #     print unicode(subtree.label())
 
 
-# 1
-# from nltk.parse import stanford
-# import os
-#
-#
-# def parser2():
-#     os.environ["STANFORD_PARSER"] = "stanford-parser.jar"
-#     os.environ["STANFORD_MODELS"] = "/home/zhangxin/work/stanford/stanford-chinese-corenlp-2016-01-19-models.jar"
-#
-#     s = "我爱坤艳,我要给坤艳生一堆儿子"
-#     parser = stanford.StanfordParser(model_path=u'edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz')
-#     r = parser.raw_parse_sents(
-#         ("the quick brown fox jumps over the lazy dog", "the quick grey wolf jumps over the lazy fox"))
-#
-#     print r
-#
-# if __name__ == "__main__":
-#     parser2()
+# 依存句法分析
+def parser_dependency(sentence):
+    eng_parser = StanfordDependencyParser(path_to_jar=u"/home/zhangxin/work/stanford/jars/stanford-parser.jar",
+                                          path_to_models_jar=u"/home/zhangxin/work/stanford/jars/stanford-parser-3.6.0-models.jar",
+                                          model_path=u"/home/zhangxin/work/stanford/jars/edu/chinesePCFG.ser.gz")
+    res = list(eng_parser.parse(sentence.split()))
+    print type(res)
+    for row in res[0].triples():
+        # print row[1]
+        print row[0][0], row[1], row[2][0]
 
 
+if __name__ == "__main__":
 
-# 4
-# from nltk.internals import find_jars_within_path
-# from nltk.parse.stanford import StanfordDependencyParser
-# dep_parser=StanfordDependencyParser(model_path="edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz")
-# stanford_dir = st._stanford_jar.rpartition('/')[0]
-# # or in windows comment the line above and uncomment the one below:
-# #stanford_dir = st._stanford_jar.rpartition("\\")[0]
-# stanford_jars = find_jars_within_path(stanford_dir)
-# st.stanford_jar = ':'.join(stanford_jars)
-# [parse.tree() for parse in dep_parser.raw_parse("The quick brown fox jumps over the lazy dog.")]
+    sent = u'猴子 喜欢 吃 香蕉'
+    sent1 = u'我 非常 爱 苹果 , 但是 我 特别 讨厌 小米'
+    sent2 = u"北海 已 成为 中国 对外开放 中 升起 的 一 颗 明星"
+
+    parser(sent)
