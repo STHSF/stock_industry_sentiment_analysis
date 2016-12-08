@@ -64,7 +64,7 @@
 # file_neg = '/Users/li/workshop/MyRepository/DeepNaturalLanguageProcessing/DeepNLP/data/test3.txt'
 # file_pos = '/Users/li/workshop/MyRepository/DeepNaturalLanguageProcessing/DeepNLP/data/test2.txt'
 # w2c_model_path = '/Users/li/workshop/MyRepository/DeepNaturalLanguageProcessing/DeepNLP/word2vecmodel/model'
-w2c_model_path = '/Users/li/workshop/MyRepository/stock_industry_sentiment_analysis/data_warehouse/word2vec_model/w2cmodel'
+w2c_model_path = '/home/zhangxin/work/workplace_python/stock_industry_sentiment_analysis/data_warehouse/word2vec_model/w2cmodel'
 
 # w2v模型的参数
 n_dim = 200
@@ -72,15 +72,16 @@ min_count = 2
 num_classes = 3
 
 
-pos_file_path = '/Users/li/workshop/DataSet/sentiment/train/result_pos.txt'
-neg_file_path = '/Users/li/workshop/DataSet/sentiment/train/result_neg.txt'
-neu_file_path = '/Users/li/workshop/DataSet/sentiment/train/result_neu.txt'
+# pos_file_path = '/Users/li/workshop/DataSet/sentiment/train/result_pos.txt'
+# neg_file_path = '/Users/li/workshop/DataSet/sentiment/train/result_neg.txt'
+# neu_file_path = '/Users/li/workshop/DataSet/sentiment/train/result_neu.txt'
 
-# pos_file_path = '/home/zhangxin/work/workplace_python/DeepSentiment/data/train/result_pos.txt'
-# neg_file_path = '/home/zhangxin/work/workplace_python/DeepSentiment/data/train/result_neg.txt'
+pos_file_path = '/home/zhangxin/work/workplace_python/DeepSentiment/data/train/result_pos.txt'
+neg_file_path = '/home/zhangxin/work/workplace_python/DeepSentiment/data/train/result_neg.txt'
+neu_file_path = '/home/zhangxin/work/workplace_python/DeepSentiment/data/train/result_neu.txt'
 
 
 #预测
-model_rnn_path = '/Users/li/workshop/MyRepository/stock_industry_sentiment_analysis/data_warehouse/classify_model/model_rnn/model.ckpt'
+model_rnn_path = '/home/zhangxin/work/workplace_python/stock_industry_sentiment_analysis/data_warehouse/classify_model/model_rnn/model.ckpt'
 # predict_parent_file = 'data/text_predict'
 #================================================================================
