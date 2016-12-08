@@ -18,8 +18,9 @@ sys.setdefaultencoding('utf8')
 class SentimentUnits(object):
     """
     情感（语义）单元计算
-    将doc中的内容按照cut_list中的标点符号进行切割，组成情感（语义）单元
+    将doc中的内容按照cut_list中的标点符号进行切割，分割成情感（语义）单元
     """
+
     def __init__(self, doc, cut_list):
         self.doc = doc
         self.cut_list = cut_list
@@ -63,13 +64,13 @@ class SentimentUnits(object):
         return self.sentiment_units
 
 
-def sentence_split(sentence):
+def units_cut(unit):
     """
     调用分词系统，对每个情感单元分词
-    :param sentence: 情感单元
+    :param unit: 情感单元
     :return: 情感单元的分词结果，一个列表。
     """
-    line = sentence.strip().decode('utf-8', 'ignore')  # 去除每行首尾可能出现的空格，并转为Unicode进行处理
+    line = unit.strip().decode('utf-8', 'ignore')  # 去除每行首尾可能出现的空格，并转为Unicode进行处理
     word_list = list(jieba.cut(line))
     return word_list
 
@@ -110,6 +111,7 @@ def sentence(file_parent_path):
         file_seg[file_name] = res
         data.close()
     return file_seg
+
 
 count = 0
 
@@ -165,7 +167,8 @@ if __name__ == "__main__":
     # result = sentence('/home/zhangxin/work/workplace_python/DeepSentiment/data/predict_test/')
     # for r in result:
     #     print r
-    re = SentimentUnits("我喜欢女生，我爱中国,   我讨厌日本,,\n我不喜欢\n复杂的东西.", [",",".","，"])
-    print type(re.result())
+    re = SentimentUnits("我喜欢女生，我爱中国,   我讨厌日本,,\n我不喜欢\n复杂的东西.", [",", ".", "，"])
+
+    units = list(re)
     for i in re.result():
         print i
