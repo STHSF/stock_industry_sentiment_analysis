@@ -139,7 +139,7 @@ def filter_stop_word(cut_result):
     :param cut_result:
     :return:
     """
-    stopwords = {}.fromkeys([line.rstrip() for line in open(globe.stopword)])
+    stopwords = {}.fromkeys([line.rstrip().encode('utf-8') for line in open(globe.stopword)])
     final = []
     for seg in cut_result:
         seg = seg.decode('utf-8')
