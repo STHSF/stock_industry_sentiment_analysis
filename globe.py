@@ -7,7 +7,7 @@
 # corpus
 # input_txt = '/home/zhangxin/work/workplace_python/DeepNaturalLanguageProcessing/DeepNLP/data/input/myInput.txt'
 # output_txt = '/home/zhangxin/work/workplace_python/DeepNaturalLanguageProcessing/DeepNLP/data/input/myOutput.txt'
-# stopword = 'data/stopword.txt'
+stopword = 'data_warehouse/stopword.txt'
 #
 # data_patent = ''
 # data_process_result = '/home/zhangxin/work/workplace_python/DeepSentiment/data/tagging/result.txt'

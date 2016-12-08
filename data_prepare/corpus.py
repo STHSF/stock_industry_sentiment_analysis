@@ -135,17 +135,17 @@ def sentence_out(file_parent_path, out):
 
 def filter_stop_word(cut_result):
     """
-    过滤停用词，
+    过滤停用词
     :param cut_result:
     :return:
     """
     stopwords = {}.fromkeys([line.rstrip() for line in open(globe.stopword)])
     final = []
     for seg in cut_result:
-        seg = seg.encode('utf-8')
+        seg = seg.decode('utf-8')
         if seg not in stopwords:
             final.append(seg)
-    final_str = ",".join(final)
+    final_str = "|".join(final)
     return final_str
 
 
@@ -167,8 +167,16 @@ if __name__ == "__main__":
     # result = sentence('/home/zhangxin/work/workplace_python/DeepSentiment/data/predict_test/')
     # for r in result:
     #     print r
-    re = SentimentUnits("我喜欢女生，我爱中国,   我讨厌日本,,\n我不喜欢\n复杂的东西.", [",", ".", "，"])
+    re = SentimentUnits("我喜欢女生，我爱中国,我讨厌日本,我不喜欢复杂的东西.", [",", ".", "，"])
 
-    units = list(re)
+    # units = list(re)
+    sentiment_units = []
+
     for i in re.result():
-        print i
+        sentiment_units.append(i)
+
+    sentiment_units_cut = []
+    for j in sentiment_units:
+        sentiment_units_cut.append(units_cut(j))
+
+    print sentiment_units_cut[0]
