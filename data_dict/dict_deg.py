@@ -13,7 +13,7 @@ import jieba.posseg as pseg  # 需要另外加载一个词性标注模块
 import data_processing.read_data as read
 
 
-# 词性标注句子成分
+# 词性标注挑出句子的副词
 def parser(sentence):
     result = []
     seg = pseg.cut(sentence)
@@ -24,7 +24,7 @@ def parser(sentence):
     return result
 
 
-# 雪球数据 句法分析
+# 雪球数据 挑出句子副词
 def xueqiu_parser():
     data = read.read_all(1000)
     word_d = {}
@@ -49,5 +49,4 @@ def xueqiu_parser():
 if __name__ == "__main__":
     # parser("我非常喜欢坤艳,我要为坤艳生很多猴子")
     # parser("多头今天死绝了么?")
-    # parser("妖气十足")
-    xueqiu_parser()
+    parser("妖气十足")

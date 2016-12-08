@@ -54,4 +54,5 @@ if __name__ == "__main__":
     sent1 = u'我 非常 爱 苹果 , 但是 我 特别 讨厌 小米'
     sent2 = u"北海 已 成为 中国 对外开放 中 升起 的 一 颗 明星"
 
-    parser(sent)
+    # parser(sent)
+    parser_dependency(sent)
