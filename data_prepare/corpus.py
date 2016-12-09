@@ -18,8 +18,9 @@ sys.setdefaultencoding('utf8')
 class SentimentUnits(object):
     """
     情感（语义）单元计算
-    将doc中的内容按照cut_list中的标点符号进行切割，组成情感（语义）单元
+    将doc中的内容按照cut_list中的标点符号进行切割，分割成情感（语义）单元
     """
+
     def __init__(self, doc, cut_list):
         self.doc = doc
         self.cut_list = cut_list
@@ -63,13 +64,13 @@ class SentimentUnits(object):
         return self.sentiment_units
 
 
-def sentence_split(sentence):
+def units_cut(unit):
     """
     调用分词系统，对每个情感单元分词
-    :param sentence: 情感单元
+    :param unit: 情感单元
     :return: 情感单元的分词结果，一个列表。
     """
-    line = sentence.strip().decode('utf-8', 'ignore')  # 去除每行首尾可能出现的空格，并转为Unicode进行处理
+    line = unit.strip().decode('utf-8', 'ignore')  # 去除每行首尾可能出现的空格，并转为Unicode进行处理
     word_list = list(jieba.cut(line))
     return word_list
 
@@ -111,6 +112,7 @@ def sentence(file_parent_path):
         data.close()
     return file_seg
 
+
 count = 0
 
 
@@ -133,17 +135,17 @@ def sentence_out(file_parent_path, out):
 
 def filter_stop_word(cut_result):
     """
-    过滤停用词，
+    过滤停用词
     :param cut_result:
     :return:
     """
-    stopwords = {}.fromkeys([line.rstrip() for line in open(globe.stopword)])
+    stopwords = {}.fromkeys([line.rstrip().encode('utf-8') for line in open(globe.stopword)])
     final = []
     for seg in cut_result:
-        seg = seg.encode('utf-8')
+        seg = seg.decode('utf-8')
         if seg not in stopwords:
             final.append(seg)
-    final_str = ",".join(final)
+    final_str = "|".join(final)
     return final_str
 
 
@@ -165,7 +167,16 @@ if __name__ == "__main__":
     # result = sentence('/home/zhangxin/work/workplace_python/DeepSentiment/data/predict_test/')
     # for r in result:
     #     print r
-    re = SentimentUnits("我喜欢女生，我爱中国,   我讨厌日本,,\n我不喜欢\n复杂的东西.", [",",".","，"])
-    print type(re.result())
+    re = SentimentUnits("我喜欢女生，我爱中国,我讨厌日本,我不喜欢复杂的东西.", [",", ".", "，"])
+
+    # units = list(re)
+    sentiment_units = []
+
     for i in re.result():
-        print i
+        sentiment_units.append(i)
+
+    sentiment_units_cut = []
+    for j in sentiment_units:
+        sentiment_units_cut.append(units_cut(j))
+
+    print sentiment_units_cut[0]
