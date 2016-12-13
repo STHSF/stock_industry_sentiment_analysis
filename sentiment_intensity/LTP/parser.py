@@ -28,7 +28,7 @@ def read_dict():
     D = {}
     S = {}
     N = []
-    P = {}
+    P = {}   # 极性词典
 
     for d in open(d_path):
         temp = d.split(" ")
@@ -126,10 +126,10 @@ if __name__ == "__main__":
         # print d, D[d]
 
     # 单句测试
-    text = "我喜欢苹果,讨厌小米"
-    text_1 = "我非常不喜欢苹果"
-    text_0 = "亏损幅度很大"
-    result = parser(text_0, D, N)
+    text = "我喜欢苹果,但是讨厌小米"
+    text4 = "我非常不喜欢苹果"
+    text5 = "亏损幅度很大"
+    result = parser(text, D, N)
     score_all = 0
     for r in result:
         print r.mw, " - ", r.relation, " - ", r.cw
@@ -142,5 +142,5 @@ if __name__ == "__main__":
 
 
     # 测试基于依存句法的二叉树
-    binary_tree.btree(result, [u"亏损"])
-
+    # binary_tree.btree_xrc(result, [u"我",u"非常",u"不",u"喜欢",u"苹果"])
+    binary_tree.btree_zx(result)

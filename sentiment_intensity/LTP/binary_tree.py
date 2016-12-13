@@ -21,21 +21,37 @@ def btree(relation_list, words):
     #
     # for relation in relation_list:
     #     print relation.mw, " - ", relation.relation, " - ", relation.cw
-    T = []
+
     # while len(relation_list) >0:
+
+    T = []
+    T_list = []
     for w in words:
         es = {}
         es_word = [w]   # 当前情感词的关联词集合
+
         sort_dict = {
-            "ATT": 1,
-            "ADV": 2,
-            "VV": 3,
-            "COO": 4,
-            "SMP": 5,
-            "VOB": 6,
+            "VOB": 1,
+            "ATT": 2,
+            "ADV": 3,
+            "VV": 4,
+            "COO": 5,
+            "SMP": 6,
             "SBV": 7,
             "CNJ": 8
         }
+
+
+        # sort_dict = {
+        #     "ATT": 1,
+        #     "ADV": 2,
+        #     "VV": 3,
+        #     "COO": 4,
+        #     "SMP": 5,
+        #     "VOB": 6,
+        #     "SBV": 7,
+        #     "CNJ": 8
+        # }
 
         # 查找情感词关联的依存关系
         for relation in relation_list:
@@ -116,70 +132,187 @@ def btree(relation_list, words):
 
 #
         T1.draw()
-#
-# tree1 = tree.Tree('NP', ['the', 'rabbit'])
-# print(tree1)
-#
-# tree2 = tree.Tree('root', [tree1, 'test'])
-# tree2.insert(2, ['good'])
-# tree2.append(tree1)
-# tree2.append(["OK"])
-# tree2.set_label("Zhangxin")
-#
-# tree3 = tree2.subtrees()
-#
-# tree4 = tree.Tree(u"测试", ["", ""])
-# tree4.set_label("ceshi")
-# tree4.insert(0, tree1)
-# tree2.append(tree4)
-#
-#
-# print tree3
-# for t in tree3:
-#     print t
-# # tree3.draw()
-# tree2.draw()
-#
-# zishu = tree2.leaves()
-# for l in zishu:
-#     print l
 
 
-# for r in rs:
-#     name = r.relation
-#     w1 = r.cw
-#     w2 = r.mw
+#实现相若晨论文中的二叉树构建
+def btree_xrc(relation_list, words):
+    """
+    构建二叉树
+    :param relation_list: 依存关系集合
+    :param words: 原始词集合
+    :return: 二叉树
+    """
+    #
+    # for relation in relation_list:
+    #     print relation.mw, " - ", relation.relation, " - ", relation.cw
+
+    # while len(relation_list) >0:
+
+    # relation_dict = {}
+    # count = 1
+    # for r in relation_list:
+    #     relation_dict[count] = r
+    #     count += 1
+    # 直接用list的下标作为编号,,因此编号从0 开始
+
+    # T = []
+    T_list = []
+
+    # 栈
+    stack = []
+    T = tree.Tree("root", ["", ""])
+    T_word = []
+    for w in words:
+
+        if len(stack) == 0:
+            print w
+            stack.append(w)
+        else:
+            w0 = stack.pop()
+            print w, w0
+            for r in relation_list:
+                if r.mw == w and r.cw == w0:
+                    temp = tree.Tree(relation_list.index(r), [w, w0])
+                    T_word.append([w, w0])
+
+
+                    T = temp
+                elif r.mw == w0 and r.cw == w:
+                    temp = tree.Tree(relation_list.index(r), [w0, w])
+                    T_word.append([w, w0])
+                    T = temp
+
+    T.draw()
+
+
+# zx
+def btree_zx(relation_list):
+    """
+    构建二叉树
+    :param relation_list: 依存关系集合
+    :param words: 原始词集合
+    :return: 二叉树
+    """
+
+    # while len(relation_list) >0:
+
+    # relation_dict = {}
+    # count = 1
+    # for r in relation_list:
+    #     relation_dict[count] = r
+    #     count += 1
+    # 直接用list的下标作为编号,,因此编号从0 开始
+
+    # 栈
+    stack = []
+
+    list_copy = []
+    for r in relation_list:
+        list_copy.append(r)
+
+    T = tree.Tree("root", ["", ""])
+    T_list = []
+    T_word = []
+
+    for n in range(len(relation_list)):
+        r = relation_list.pop()
+
+        mw = r.mw
+        cw = r.cw
+
+        id = list_copy.index(r)
+
+        # 如果是并列关系: COO
+        if r.relation == "COO":
+            print "\n[COO]---"
+            if not T_word.__contains__(mw) and not T_word.__contains__(cw):
+                temp = creat_tree(mw, cw, r.relation, id)
+                T_word.extend([mw, cw])
+                T = temp
+                T_list.append(T)
+            elif T_word.__contains__(mw) and not T_word.__contains__(cw):
+                print "[2]", mw, cw
+                T_word.append(cw)
+
+                temp = T
+                T = tree.Tree(id, [temp, cw])
+                T_list.append(T)
+            elif not T_word.__contains__(mw) and T_word.__contains__(cw):
+                print "[3]", mw, cw
+                T_word.append(mw)
+
+                temp = T
+                T = tree.Tree(id, [mw, temp])
+                T_list.append(T)
+            else:
+                print "[4]", mw, cw
+                n1 = tree.Tree("n1", ["", ""])
+                n2 = tree.Tree("n2", ["", ""])
+
+                for t in T_list:
+                    if t.leaves().__contains__(cw):
+                        n1 = t
+                    if t.leaves().__contains__(mw):
+                        n2 = t
+                T = tree.Tree(id, [n2, n1])
+                T_list.append(T)
+        else:
+            print "\n[不是COO]---"
+            if not T_word.__contains__(mw) and not T_word.__contains__(cw):
+                print "[1]", mw, cw
+                temp = creat_tree(mw, cw, r.relation, id)
+                T_word.extend([mw, cw])
+                T = temp
+                T_list.append(T)
+            elif T_word.__contains__(mw) and not T_word.__contains__(cw):
+                print "[2]", mw, cw
+                T_word.append(cw)
+
+                temp = T
+                T = tree.Tree(id, [temp, cw])
+                T_list.append(T)
+            elif not T_word.__contains__(mw) and T_word.__contains__(cw):
+                print "[3]", mw, cw
+                T_word.append(mw)
+                temp = T
+                T = tree.Tree(id, [mw, temp])
+                T_list.append(T)
+            else:
+                print "[4]", mw, cw
+                n1 = tree.Tree("n1", ["", ""])
+                n2 = tree.Tree("n2", ["", ""])
+
+                for t in T_list:
+                    if t.leaves().__contains__(cw):
+                        n1 = t
+                    if t.leaves().__contains__(mw):
+                        n2 = t
+                T = tree.Tree(id, [n2, n1])
+                T_list.append(T)
+
+
+    T.draw()
+
+
+def creat_tree(mw, cw, relation, id):
+
+    if relation == "VOB":
+        return tree.Tree(id, [cw, mw])
+    # elif
+
+
+
 #
-#     # n = tree.Tree(name, ["", ""])
-#     # T1.append(n)
+# a = [1,2,3,4]
+# b=[]
+# for i in a:
+#     b.append(i)
 #
-#     n1 = ""
-#     n2 = ""
 #
-#     if not T1_word.__contains__(w1) and not T1_word.__contains__(w2):
-#         print "[1]", w1, w2
-#         n1 = w2
-#         n2 = w1
-#         T1_word.append(w1)
-#         T1_word.append(w2)
-#     elif T1_word.__contains__(w1) and not T1_word.__contains__(w2):
-#         print "[2]", w1, w2
-#         n1 = w2
-#         T1_word.append(w2)
-#         n2 = "LEFT"
-#     elif T1_word.__contains__(w2) and not T1_word.__contains__(w1):
-#         print "[3]", w1, w2
-#         n1 = "RIGHT"
-#         n2 = w1
-#         T1_word.append(w1)
-#     # else:
+# for n in range(len(a)):
+#     print n, a.pop()
+#     print
 #
-#     if n1 == "RIGHT":
-#         T1.insert(1, T1.__getitem__(1))
 #
-#     else:
-#         T1.insert(1, n1)
-#     if n2 == "LEFT":
-#         T1.insert(0, T1.__getitem__(0))
-#     else:
-#         T1.insert(0, n2)
+#
+# print b

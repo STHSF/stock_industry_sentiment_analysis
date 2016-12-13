@@ -24,16 +24,12 @@ def parser(sentence):
     chi_parser = StanfordParser(path_to_jar=u"/home/zhangxin/work/stanford/jars/stanford-parser.jar",
                                 path_to_models_jar=u"/home/zhangxin/work/stanford/jars/stanford-parser-3.6.0-models.jar",
                                 model_path=u"/home/zhangxin/work/stanford/jars/edu/chinesePCFG.ser.gz")
-    re = chi_parser.parse(sentence.split())
+    temp =sentence.split()
+    print type(temp)
 
-    for r in re:
-        print type(r)
-        r.pprint()  # 打印树
-        r.draw()  # 画图
+    re = chi_parser.parse(temp)
 
-        # 打印label
-        # for subtree in r.subtrees():
-        #     print unicode(subtree.label())
+    return re
 
 
 # 依存句法分析
@@ -47,15 +43,3 @@ def parser_dependency(sentence):
         # print row[1]
         print row[0][0], row[1], row[2][0]
 
-
-if __name__ == "__main__":
-
-    sent = u'这 只 股票 涨 的 很 疯狂'
-    sent5 = u'这 家 酒店 环境 但是 我 非常 不 他们 的 服务'
-    sent4 = u'我 非常 不 喜欢 苹果'
-    sent3 = u'猴子 喜欢 吃 香蕉'
-    sent1 = u'我 非常 爱 苹果 , 但是 我 特别 讨厌 小米'
-    sent2 = u"北海 已 成为 中国 对外开放 中 升起 的 一 颗 明星"
-
-    parser(sent)
-    # parser_dependency(sent)
