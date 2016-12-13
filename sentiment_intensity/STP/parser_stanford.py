@@ -56,3 +56,4 @@ def parser_dependency(sentence):
     for row in res[0].triples():
         # print row[1]
         print row[0][0], row[1], row[2][0]
+
