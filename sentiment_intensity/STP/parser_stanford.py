@@ -23,11 +23,9 @@ from nltk.parse.stanford import StanfordDependencyParser
 def parser(sentence):
     chi_parser = StanfordParser(path_to_jar=u"/home/zhangxin/work/stanford/jars/stanford-parser.jar",
                                 path_to_models_jar=u"/home/zhangxin/work/stanford/jars/stanford-parser-3.6.0-models.jar",
+                                # model_path=u"/home/zhangxin/work/stanford/jars/edu/chineseFactored.ser.gz")
                                 model_path=u"/home/zhangxin/work/stanford/jars/edu/chinesePCFG.ser.gz")
-    temp =sentence.split()
-    print type(temp)
-
-    re = chi_parser.parse(temp)
+    re = chi_parser.parse(sentence.split())
 
     return re
 
@@ -43,3 +41,4 @@ def parser_dependency(sentence):
         # print row[1]
         print row[0][0], row[1], row[2][0]
 
+    return res
