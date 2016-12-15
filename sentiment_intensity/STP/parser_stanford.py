@@ -17,11 +17,14 @@ import globe
 reload(sys)
 sys.setdefaultencoding("utf-8")
 
-# path_dit = {
-#     'path_to_jar': u"/home/zhangxin/work/stanford/jars/stanford-parser.jar",
-#     'path_to_models_jar': u"/home/zhangxin/work/stanford/jars/stanford-parser-3.6.0-models.jar",
-#     'model_path': u"/home/zhangxin/work/stanford/jars/edu/chinesePCFG.ser.gz"
-# }
+
+path_dit = {
+    'path_to_jar': u"/home/zhangxin/work/stanford/jars/stanford-parser.jar",
+    'path_to_models_jar': u"/home/zhangxin/work/stanford/jars/stanford-parser-3.6.0-models.jar",
+    'model_path': u"/home/zhangxin/work/stanford/jars/edu/chinesePCFG.ser.gz"
+    # 'model_path': u"/home/zhangxin/work/stanford/jars/edu/chineseFactored.ser.gz"
+}
+
 
 path_dit = globe.path_dit
 
@@ -31,10 +34,7 @@ def parser(sentence):
     chi_parser = StanfordParser(path_to_jar=path_dit.get('path_to_jar'),
                                 path_to_models_jar=path_dit.get('path_to_models_jar'),
                                 model_path=path_dit.get('model_path'))
-    temp = sentence.split()
-    print type(temp)
-
-    re = chi_parser.parse(temp)
+    re = chi_parser.parse(sentence.split())
 
     return re
 
@@ -50,3 +50,4 @@ def parser_dependency(sentence):
         # print row[1]
         print row[0][0], row[1], row[2][0]
 
+    return res
