@@ -11,6 +11,7 @@
 import parser_stanford as sfp
 import nltk.tree as tree
 import jieba
+import globe
 import sys
 reload(sys)
 sys.setdefaultencoding("utf-8")
@@ -20,31 +21,23 @@ senti_dict = {}
 fou_dict = []
 but_dict = []
 
-# path_dic = {
+# corpus_path_dic = {
 #     'd_path': "/home/zhangxin/文档/市场情绪分析/情感词典/stanford/程度副词_datatang.txt",
 #     's_path': "/home/zhangxin/文档/市场情绪分析/情感词典/stanford/[兰秋军]词典数据.txt",
 #     'f_path': "/home/zhangxin/文档/市场情绪分析/情感词典/stanford/fou.txt",
 #     'b_path': "/home/zhangxin/文档/市场情绪分析/情感词典/stanford/but.txt"
 # }
-path_dic = {
-    'd_path': "/Users/li/workshop/MyRepository/stock_industry_sentiment_analysis/"
-              "data_warehouse/stanford/jars/stanford/程度副词_datatang.txt",
-    's_path': "/Users/li/workshop/MyRepository/stock_industry_sentiment_analysis/"
-              "data_warehouse/stanford/jars/stanford/[兰秋军]词典数据.txt",
-    'f_path': "/Users/li/workshop/MyRepository/stock_industry_sentiment_analysis/"
-              "data_warehouse/stanford/jars/stanford/fou.txt",
-    'b_path': "/Users/li/workshop/MyRepository/stock_industry_sentiment_analysis/"
-              "data_warehouse/stanford/jars/stanford/but.txt"
-}
+
+corpus_path_dic = globe.corpus_path_dic
 
 
 # 读取词典
 def read_dict():
 
-    d_path = path_dic.get('d_path')
-    s_path = path_dic.get('s_path')
-    f_path = path_dic.get('f_path')
-    b_path = path_dic.get('b_path')
+    d_path = corpus_path_dic.get('d_path')  # 程度副词词典
+    s_path = corpus_path_dic.get('s_path')  # 兰秋军数据词典
+    f_path = corpus_path_dic.get('f_path')  # 否定词
+    b_path = corpus_path_dic.get('b_path')  # 转折词
 
     for d in open(d_path):
         temp = d.decode("utf-8").split(" ")
@@ -135,7 +128,7 @@ if __name__ == "__main__":
     sent11 = jieba.cut(u'这家酒店环境很不错, 但是服务差')  # -0.53 未做转折
     sent12 = jieba.cut(u'我非常看好这个')  # 1.95
     sent13 = jieba.cut(u'我看好这个')  # 1.3
-    sent14 = jieba.cut(u'我不喜欢这个')  # -0.47
+    sent14 = jieba.cut(u'我不喜欢这个，')  # -0.47
     sent15 = jieba.cut(u'我很不喜欢这个')  # -0.705
     sent16 = jieba.cut(u'这只股票会涨')  # 0 会涨分词没分开
     sent17 = jieba.cut(u'这只股票涨')  # 1.2
@@ -146,8 +139,9 @@ if __name__ == "__main__":
     sent22 = jieba.cut(u'这只股票一定涨')  # 0.97  '一定'作为贬义词
     sent = jieba.cut(u'理想很丰满，道路很曲折，我等还需耐心等待柳暗花明的一天')  # -0.0852
 
-    str = " ".join(sent)
-    re = sfp.parser(str)
+    str = " ".join(sent11)
+    print str
+    re = sfp.parser(str)  # 句法分析
 
     for r in re:
         r.pprint()  # 打印树
@@ -155,9 +149,7 @@ if __name__ == "__main__":
         result = com(r)  # 计算情感值
         print result
 
-        r.draw()
-
-
+        # r.draw()
 
         # if flag == "+":
         #     temp += senti

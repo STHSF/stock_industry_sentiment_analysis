@@ -1,10 +1,12 @@
 # coding=utf-8
 # 主函数
-
+import jieba
 import re
 from data_prepare import corpus
+from sentiment_intensity.STP import parser_stanford as sfp
+from sentiment_intensity.STP import sentiment
 
-comment = "我喜欢女生，我爱中国,我讨厌日本。我不喜欢，复杂的东西."
+comment = "这家酒店环境很不错， 但是服务差"
 cut_list = [',', '.', '，', '。']
 
 # 评论切句，构成情感单元
@@ -24,17 +26,26 @@ for j in sentiment_units:
     sentiment_units_cut.append(res)
 
 
-for i in sentiment_units_cut:
-
-    string = re.sub("[\s+\.\!\/_,$%^*(+\"\']+|[+——！，。？、~@#￥%……&*（）]+".decode("utf-8"), "".decode("utf-8"), i)
-
-    print string
-
-print
-# 情感单元情感趋势计算
-
 # 情感单元情感强度计算
 
+sentiment.read_dict()
+
+for i in sentiment_units_cut:
+
+    print i
+    # string = re.sub("[\s+\.\!\/_,$%^*(+\"\']+|[+——！，。？、~@#￥%……&*（）]+".decode("utf-8"), " ".decode("utf-8"), i)
+
+    re = sfp.parser(i)  # 句法分析
+
+    for r in re:
+        r.pprint()  # 打印树
+
+        result = sentiment.com(r)  # 计算情感值
+        print result
+
+        # r.draw()
+
+# 情感单元情感趋势计算
 
 
 # if __name__ == '__main__':

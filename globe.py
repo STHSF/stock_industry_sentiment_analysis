@@ -81,7 +81,23 @@ neu_file_path = '/Users/li/workshop/DataSet/sentiment/train/result_neu.txt'
 # neu_file_path = '/home/zhangxin/work/workplace_python/DeepSentiment/data/train/result_neu.txt'
 
 
-#预测
+# 预测
 model_rnn_path = './data_warehouse/classify_model/model_rnn/model.ckpt'
 # predict_parent_file = 'data/text_predict'
+
+
+# 语义规则模型
+
+path_dit = {
+    'path_to_jar': u"/Users/li/workshop/StanfordNLP/stanford/jars/stanford-parser.jar",
+    'path_to_models_jar': u"/Users/li/workshop/StanfordNLP/stanford/jars/stanford-parser-3.6.0-models.jar",
+    'model_path': u"/Users/li/workshop/StanfordNLP/stanford/jars/edu/chinesePCFG.ser.gz"
+}
+
+corpus_path_dic = {
+    'd_path': "/Users/li/workshop/StanfordNLP/stanfordcorpus/程度副词_datatang.txt",
+    's_path': "/Users/li/workshop/StanfordNLP/stanfordcorpus/[兰秋军]词典数据.txt",
+    'f_path': "/Users/li/workshop/StanfordNLP/stanfordcorpus/fou.txt",
+    'b_path': "/Users/li/workshop/StanfordNLP/stanfordcorpus/but.txt"
+}
 #================================================================================
