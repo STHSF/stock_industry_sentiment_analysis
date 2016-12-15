@@ -60,8 +60,8 @@ def word2vec_test():
     res = data_processing.data_split(pos_data, neu_data, neg_data)
     x_train = res[0]
     x_train = data_processing.text_clean(x_train)
-    n_dim = 200
-    min_count = 2
+    n_dim = globe.n_dim
+    min_count = globe.min_count
     model = built_word2vec_model(x_train, n_dim, min_count)
     model.save(globe.w2c_model_path)  # save model
 
