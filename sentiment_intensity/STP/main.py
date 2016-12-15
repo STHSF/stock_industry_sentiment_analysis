@@ -118,7 +118,7 @@ if __name__ == "__main__":
 
     # test()
 
-    print "%0.3f" % ((time.time() - begin) / 60), "min"
+    print "%.3f" % ((time.time() - begin) / 60), "min"
 
     writer_pos = open(u"/home/zhangxin/文档/市场情绪分析/情感词典/stanford/senti_pos.txt", "wb")
     writer_neg = open(u"/home/zhangxin/文档/市场情绪分析/情感词典/stanford/senti_neg.txt", "wb")

@@ -9,20 +9,30 @@
 # Time: 16-12-7 下午2:25
 # -------------------------------------------
 import sys
-import nltk
 from nltk.parse.stanford import StanfordParser
 from nltk.parse.stanford import StanfordDependencyParser
 from nltk.tree import Tree
+import globe
 
 reload(sys)
 sys.setdefaultencoding("utf-8")
 
+<<<<<<< HEAD
 path_dit = {
     'path_to_jar': u"/home/zhangxin/work/stanford/jars/stanford-parser.jar",
     'path_to_models_jar': u"/home/zhangxin/work/stanford/jars/stanford-parser-3.6.0-models.jar",
     'model_path': u"/home/zhangxin/work/stanford/jars/edu/chinesePCFG.ser.gz"
     # 'model_path': u"/home/zhangxin/work/stanford/jars/edu/chineseFactored.ser.gz"
 }
+=======
+# path_dit = {
+#     'path_to_jar': u"/home/zhangxin/work/stanford/jars/stanford-parser.jar",
+#     'path_to_models_jar': u"/home/zhangxin/work/stanford/jars/stanford-parser-3.6.0-models.jar",
+#     'model_path': u"/home/zhangxin/work/stanford/jars/edu/chinesePCFG.ser.gz"
+# }
+
+path_dit = globe.path_dit
+>>>>>>> ab11b5f3c85254ae01644e623a1dbf8519dc1c09
 
 # path_dit = {
 #     'path_to_jar': u"/Users/li/workshop/MyRepository/stock_industry_sentiment_analysis/"
