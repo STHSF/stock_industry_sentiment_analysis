@@ -26,7 +26,7 @@ path_dit = {
 }
 
 
-path_dit = globe.path_dit
+# path_dit = globe.path_dit
 
 
 # 句法分析
