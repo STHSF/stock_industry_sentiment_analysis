@@ -10,6 +10,7 @@ import jieba
 import globe
 import os
 import sys
+import re
 
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -55,7 +56,7 @@ class SentimentUnits(object):
 
     def result(self):
         self.sentiment_units = []
-        tmp = self.cut(list(self.doc.decode('utf-8').strip("\n\t")))
+        tmp = self.cut(list(self.doc.decode('utf-8')))
         for line in tmp:
             if line.strip() != "":
                 self.sentiment_units.append(line.strip())
@@ -167,16 +168,11 @@ if __name__ == "__main__":
     # result = sentence('/home/zhangxin/work/workplace_python/DeepSentiment/data/predict_test/')
     # for r in result:
     #     print r
-    re = SentimentUnits("我喜欢女生，我爱中国,我讨厌日本,我不喜欢复杂的东西.", [",", ".", "，"])
 
-    # units = list(re)
-    sentiment_units = []
+    sentence = "我喜欢中国。我讨厌,日，本"
 
-    for i in re.result():
-        sentiment_units.append(i)
+    res = re.split(",|。|，", sentence)
+    for i in res:
+        print i
 
-    sentiment_units_cut = []
-    for j in sentiment_units:
-        sentiment_units_cut.append(units_cut(j))
 
-    print sentiment_units_cut[0]

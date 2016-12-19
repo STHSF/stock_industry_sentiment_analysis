@@ -102,7 +102,7 @@ def compute(sentence):
 
             print result
             r.draw()
-            return result
+        return result
 
     except Exception:
         return "Kong"

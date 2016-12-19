@@ -9,6 +9,7 @@
 # Time: 16-12-14 下午5:20
 # -------------------------------------------
 import jieba
+import globe
 
 deg_dict = {}
 senti_dict = {}
@@ -25,16 +26,12 @@ def dict():
     b_path = "/home/zhangxin/文档/市场情绪分析/情感词典/stanford/but.txt"
     e_path = "/home/zhangxin/文档/市场情绪分析/情感词典/stanford/eng.txt"
 
-    path_dic = {
-        'd_path': "/Users/li/workshop/MyRepository/stock_industry_sentiment_analysis/"
-                  "data_warehouse/stanford/jars/stanford/程度副词_datatang.txt",
-        's_path': "/Users/li/workshop/MyRepository/stock_industry_sentiment_analysis/"
-                  "data_warehouse/stanford/jars/stanford/[兰秋军]词典数据.txt",
-        'f_path': "/Users/li/workshop/MyRepository/stock_industry_sentiment_analysis/"
-                  "data_warehouse/stanford/jars/stanford/fou.txt",
-        'b_path': "/Users/li/workshop/MyRepository/stock_industry_sentiment_analysis/"
-                  "data_warehouse/stanford/jars/stanford/but.txt"
-    }
+    path_dic = globe.corpus_path_dic
+    d_path = path_dic.get('d_path')
+    s_path = path_dic.get('s_path')
+    f_path = path_dic.get('f_path')
+    b_path = path_dic.get('b_path')
+    e_path = path_dic.get('e_path')
 
     for d in open(d_path):
         temp = d.decode("utf-8").split(" ")

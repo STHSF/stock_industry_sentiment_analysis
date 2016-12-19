@@ -96,8 +96,10 @@ path_dit = {
 
 corpus_path_dic = {
     'd_path': "/Users/li/workshop/StanfordNLP/stanfordcorpus/程度副词_datatang.txt",
-    's_path': "/Users/li/workshop/StanfordNLP/stanfordcorpus/[兰秋军]词典数据.txt",
+    's_path': "/Users/li/workshop/StanfordNLP/stanfordcorpus/senti.txt",
     'f_path': "/Users/li/workshop/StanfordNLP/stanfordcorpus/fou.txt",
-    'b_path': "/Users/li/workshop/StanfordNLP/stanfordcorpus/but.txt"
+    'b_path': "/Users/li/workshop/StanfordNLP/stanfordcorpus/but.txt",
+    'e_path': "/Users/li/workshop/StanfordNLP/stanfordcorpus/eng.txt"
 }
 #================================================================================
+

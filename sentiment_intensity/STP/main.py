@@ -116,31 +116,31 @@ if __name__ == "__main__":
 
     # test_xueqiu()
 
-    # test()
+    test()
 
     print "%.3f" % ((time.time() - begin) / 60), "min"
-
-    writer_pos = open(u"/home/zhangxin/文档/市场情绪分析/情感词典/stanford/senti_pos.txt", "wb")
-    writer_neg = open(u"/home/zhangxin/文档/市场情绪分析/情感词典/stanford/senti_neg.txt", "wb")
-
-    pos = {}
-    neg = {}
-    for d in dicts.senti_dict.keys():
-        if dicts.senti_dict[d] > 0:
-            pos[d] = dicts.senti_dict[d]
-        else:
-            neg[d] = dicts.senti_dict[d]
-
-    sort_pos = sorted(pos.iteritems(), key=lambda d: d[1], reverse=True)
-    sort_neg = sorted(neg.iteritems(), key=lambda d:d[1], reverse=True)
-
-    for p in sort_pos:
-        writer_pos.write(p[0]+"\t"+str(p[1])+"\n")
-
-    for n in sort_neg:
-        writer_neg.write(n[0]+"\t"+str(n[1])+"\n")
-
-    writer_pos.flush()
-    writer_neg.flush()
-    writer_pos.close()
-    writer_neg.close()
+    #
+    # writer_pos = open(u"/home/zhangxin/文档/市场情绪分析/情感词典/stanford/senti_pos.txt", "wb")
+    # writer_neg = open(u"/home/zhangxin/文档/市场情绪分析/情感词典/stanford/senti_neg.txt", "wb")
+    #
+    # pos = {}
+    # neg = {}
+    # for d in dicts.senti_dict.keys():
+    #     if dicts.senti_dict[d] > 0:
+    #         pos[d] = dicts.senti_dict[d]
+    #     else:
+    #         neg[d] = dicts.senti_dict[d]
+    #
+    # sort_pos = sorted(pos.iteritems(), key=lambda d: d[1], reverse=True)
+    # sort_neg = sorted(neg.iteritems(), key=lambda d:d[1], reverse=True)
+    #
+    # for p in sort_pos:
+    #     writer_pos.write(p[0]+"\t"+str(p[1])+"\n")
+    #
+    # for n in sort_neg:
+    #     writer_neg.write(n[0]+"\t"+str(n[1])+"\n")
+    #
+    # writer_pos.flush()
+    # writer_neg.flush()
+    # writer_pos.close()
+    # writer_neg.close()
