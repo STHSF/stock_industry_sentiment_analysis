@@ -16,7 +16,7 @@ import dicts
 
 
 def test_xueqiu():
-    # writer_result = open("/home/zhangxin/文档/市场情绪分析/基于依存句法分析/result_4.txt", "wb")
+    writer_result = open("/home/zhangxin/文档/市场情绪分析/基于依存句法分析/result_5.txt", "wb")
 
     data = read_data.read_xueqiu()
 
@@ -40,7 +40,7 @@ def test_xueqiu():
         print "[正在执行]", count
         count += 1
 
-        result = sentiment.compute(d[1])
+        result = sentiment.compute_seg(d[1])
 
         if d[0].__contains__(u"做多"):
             count_p += 1
@@ -50,28 +50,28 @@ def test_xueqiu():
             count_n += 1
 
         if d[0].__contains__(u"做多"):
-            result_pos.append("%s\t[%6.2f]\t%s\t\n" % (d[0], result[0], d[1]))
+            result_pos.append("%s\t[%6.2f]\t%s\t\n" % (d[0], result, d[1]))
         elif d[0].__contains__(u"看空"):
-            result_neg.append("%s\t[%6.2f]\t%s\t\n" % (d[0], result[0], d[1]))
+            result_neg.append("%s\t[%6.2f]\t%s\t\n" % (d[0], result, d[1]))
         elif d[0].__contains__(u"观望"):
-            result_aaa.append("%s\t[%6.2f]\t%s\t\n" % (d[0], result[0], d[1]))
+            result_aaa.append("%s\t[%6.2f]\t%s\t\n" % (d[0], result, d[1]))
 
-        if result[0] > 0 and d[0].__contains__(u"做多"):
+        if result > 0 and d[0].__contains__(u"做多"):
             count_p_r += 1
-        elif result[0] < 0 and d[0].__contains__(u"看空"):
+        elif result < 0 and d[0].__contains__(u"看空"):
             count_n_r += 1
 
         print "[Result]", result, count_p_r, count_n_r
 
-    # for p in result_pos:
-    #     writer_result.write(p)
-    # for n in result_neg:
-    #     writer_result.write(n)
-    # for a in result_aaa:
-    #     writer_result.write(a)
-    #
-    # writer_result.flush()
-    # writer_result.close()
+    for p in result_pos:
+        writer_result.write(p)
+    for n in result_neg:
+        writer_result.write(n)
+    for a in result_aaa:
+        writer_result.write(a)
+
+    writer_result.flush()
+    writer_result.close()
 
     print "[看多] ", count_p, count_p_r, float(count_p_r) / float(count_p)
 
@@ -99,13 +99,46 @@ def test():
     sent = u'good'
     sent = u'fuck'
     sent = u'今天能收红吗，艹'
-    sent = u'开抢了呵呵'
     sent = u'滴血的嘴唇露出嗜血的獠牙'
     sent = u'缩量明显，割肉盘加仓小晶，对它有信心'
     sent = u'缩量明显，割肉盘加仓小晶，对它有信心'
+    sent = u'开抢了呵呵'
 
-    re = sentiment.compute(sent)
+    re = sentiment.compute_seg(sent)
     print re
+
+
+def tese_lqj():
+    pos_path = "/home/zhangxin/文档/市场情绪分析/文献/依存句法/兰秋军/TotalCorpus/pos/seg_positive.txt"
+    neg_path = "/home/zhangxin/文档/市场情绪分析/文献/依存句法/兰秋军/TotalCorpus/neg/seg_negative.txt"
+
+    count_pos = 0
+    count_pos_right = 0
+
+    count_neg = 0
+    count_neg_right = 0
+
+    for p in open(pos_path):
+        count_pos += 1
+        print "[正在执行 %d]" % count_pos
+        p = p.decode("gbk").strip("\n")
+        r = sentiment.compute_seg(p)
+        if r > 0:
+            count_pos_right += 1
+
+    print "\n>>>>>>>>>>>>>>>>>>>>>"
+    print "[POS] %d / %d = %.3f" % (count_pos_right, count_pos, float(count_pos_right) / count_pos)
+    print ">>>>>>>>>>>>>>>>>>>>>\n"
+
+    for n in open(neg_path):
+        count_neg += 1
+        print "[正在执行neg %d]" % count_neg
+        n = n.decode("gbk").strip("\n")
+        r = sentiment.compute_seg(n)
+        if r < 0:
+            count_neg_right += 1
+
+    print "[NEG] %d / %d = %.3f" % (count_neg_right, count_neg, float(count_neg_right) / count_neg)
 
 
 if __name__ == "__main__":
@@ -118,29 +151,35 @@ if __name__ == "__main__":
 
     # test()
 
+    # tese_lqj()
+
     print "%.3f" % ((time.time() - begin) / 60), "min"
 
-    writer_pos = open(u"/home/zhangxin/文档/市场情绪分析/情感词典/stanford/senti_pos.txt", "wb")
-    writer_neg = open(u"/home/zhangxin/文档/市场情绪分析/情感词典/stanford/senti_neg.txt", "wb")
+    comment = read_data.read_sqlite()
+    for c in comment:
+        print "\n---------------------"
+        print c
 
-    pos = {}
-    neg = {}
-    for d in dicts.senti_dict.keys():
-        if dicts.senti_dict[d] > 0:
-            pos[d] = dicts.senti_dict[d]
-        else:
-            neg[d] = dicts.senti_dict[d]
+    # import json
+    #
+    # jf = '[{"comment": "什么是最近牛股特征？注意一下几个因素：入口、卡位、多业态、技术垄断。$乐视网(SZ300104)$ "}]'
+    # jf1 = jf[jf.index("[")+1:jf.index("]")]
+    # print jf1
+    # j = json.loads(jf1)
+    # print type(j)
+    # print j['comment']
 
-    sort_pos = sorted(pos.iteritems(), key=lambda d: d[1], reverse=True)
-    sort_neg = sorted(neg.iteritems(), key=lambda d:d[1], reverse=True)
-
-    for p in sort_pos:
-        writer_pos.write(p[0]+"\t"+str(p[1])+"\n")
-
-    for n in sort_neg:
-        writer_neg.write(n[0]+"\t"+str(n[1])+"\n")
-
-    writer_pos.flush()
-    writer_neg.flush()
-    writer_pos.close()
-    writer_neg.close()
+    # print len(u'你好')
+    #
+    # zhi_path = "/home/zhangxin/文档/市场情绪分析/情感词典/知网/pos.txt"
+    # zhi = "/home/zhangxin/文档/市场情绪分析/情感词典/stanford/zhi_pos.txt"
+    # writer_zhi = open(zhi,"wb")
+    #
+    # for d in open(zhi_path):
+    #     d = d.decode("utf-8").strip("\n")
+    #     if len(d) > 2:
+    #         print "%s  %d"%(d, len(d))
+    #         writer_zhi.write(d+"\n")
+    #
+    # writer_zhi.flush()
+    # writer_zhi.close()
