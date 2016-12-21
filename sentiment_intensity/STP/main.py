@@ -13,10 +13,11 @@ import read_data
 import jieba
 import time
 import dicts
+import re
 
 
 def test_xueqiu():
-    writer_result = open("/home/zhangxin/文档/市场情绪分析/基于依存句法分析/result_5.txt", "wb")
+    # writer_result = open("/home/zhangxin/文档/市场情绪分析/基于依存句法分析/result_5.txt", "wb")
 
     data = read_data.read_xueqiu()
 
@@ -37,41 +38,60 @@ def test_xueqiu():
     count = 1
     for d in data:
 
-        print "[正在执行]", count
-        count += 1
+        # print "[正在执行]", count
+        # count += 1
+        #
+        # result = sentiment.compute(d[1])
+        #
+        # # if d[0].__contains__(u"做多"):
+        # #     count_p += 1
+        # # elif d[0].__contains__(u"观望"):
+        # #     count_a += 1
+        # # elif d[0].__contains__(u"看空"):
+        # #     count_n += 1
+        # #
+        # # if d[0].__contains__(u"做多"):
+        # #     result_pos.append("%s\t[%6.2f]\t%s\t\n" % (d[0], result, d[1]))
+        # # elif d[0].__contains__(u"看空"):
+        # #     result_neg.append("%s\t[%6.2f]\t%s\t\n" % (d[0], result, d[1]))
+        # # elif d[0].__contains__(u"观望"):
+        # #     result_aaa.append("%s\t[%6.2f]\t%s\t\n" % (d[0], result, d[1]))
+        #
+        # if result > 0 and d[0].__contains__(u"做多"):
+        #     count_p_r += 1
+        # elif result < 0 and d[0].__contains__(u"看空"):
+        #     count_n_r += 1
 
-        result = sentiment.compute_seg(d[1])
+        # print "[Result]", result, count_p_r, count_n_r
 
-        if d[0].__contains__(u"做多"):
-            count_p += 1
-        elif d[0].__contains__(u"观望"):
-            count_a += 1
-        elif d[0].__contains__(u"看空"):
-            count_n += 1
+        if not d[0].__contains__(u"观望"):
 
-        if d[0].__contains__(u"做多"):
-            result_pos.append("%s\t[%6.2f]\t%s\t\n" % (d[0], result, d[1]))
-        elif d[0].__contains__(u"看空"):
-            result_neg.append("%s\t[%6.2f]\t%s\t\n" % (d[0], result, d[1]))
-        elif d[0].__contains__(u"观望"):
-            result_aaa.append("%s\t[%6.2f]\t%s\t\n" % (d[0], result, d[1]))
+            print "[正在执行]", count
+            count += 1
 
-        if result > 0 and d[0].__contains__(u"做多"):
-            count_p_r += 1
-        elif result < 0 and d[0].__contains__(u"看空"):
-            count_n_r += 1
+            result = sentiment.compute(d[1])
 
-        print "[Result]", result, count_p_r, count_n_r
+            if result > 0 and d[0].__contains__(u"做多"):
+                count_p_r += 1
+            elif result < 0 and d[0].__contains__(u"看空"):
+                count_n_r += 1
 
-    for p in result_pos:
-        writer_result.write(p)
-    for n in result_neg:
-        writer_result.write(n)
-    for a in result_aaa:
-        writer_result.write(a)
+            if result > 0:
+                count_p += 1
+            elif result < 0:
+                count_n += 1
 
-    writer_result.flush()
-    writer_result.close()
+            print "[Result]", result, count_p_r, count_n_r
+
+    # for p in result_pos:
+    #     writer_result.write(p)
+    # for n in result_neg:
+    #     writer_result.write(n)
+    # for a in result_aaa:
+    #     writer_result.write(a)
+    #
+    # writer_result.flush()
+    # writer_result.close()
 
     print "[看多] ", count_p, count_p_r, float(count_p_r) / float(count_p)
 
@@ -103,9 +123,22 @@ def test():
     sent = u'缩量明显，割肉盘加仓小晶，对它有信心'
     sent = u'缩量明显，割肉盘加仓小晶，对它有信心'
     sent = u'开抢了呵呵'
+    sent = u'看来我要把你割了。一看就是没潜力'
+    sent = u'好不容易碰到一个板，还被砸成这个样子，我也是醉了'
+    sent = u'这留个缝让人上车是啥意思，怎么感觉是个陷阱'
+    sent = u'小脸被打的噼噼的'
+    sent = u'这只股票被打脸了'
+    sent = u'，你是肿么了？预增那么多，还跌！'
+    sent = u'又创新低了，跌得不成人形了！我最看好的之一，这是为什么呀?'
+    sent = u'该发力了，大盘冲关就靠你了'
+    sent = u'中石化赢利能力惊人'
+    sent = u'糟糕的事情是油价涨了，股票跌了，两边损失'
+    sent = u'这只股票跌得比谁都快'
+    sent = u'昨天跑的太明智了'
+    sent = u'暴跌是跌出机会来了，最后一粒子弹也打了亿晶光电'
 
-    re = sentiment.compute_seg(sent)
-    print re
+    result = sentiment.compute(sent)
+    print result
 
 
 def tese_lqj():
@@ -119,26 +152,45 @@ def tese_lqj():
     count_neg_right = 0
 
     for p in open(pos_path):
-        count_pos += 1
         print "[正在执行 %d]" % count_pos
         p = p.decode("gbk").strip("\n")
         r = sentiment.compute_seg(p)
         if r > 0:
+            count_pos += 1
             count_pos_right += 1
-
-    print "\n>>>>>>>>>>>>>>>>>>>>>"
-    print "[POS] %d / %d = %.3f" % (count_pos_right, count_pos, float(count_pos_right) / count_pos)
-    print ">>>>>>>>>>>>>>>>>>>>>\n"
+        elif r < 0:
+            count_neg += 1
 
     for n in open(neg_path):
-        count_neg += 1
         print "[正在执行neg %d]" % count_neg
         n = n.decode("gbk").strip("\n")
         r = sentiment.compute_seg(n)
         if r < 0:
+            count_neg += 1
             count_neg_right += 1
+        elif r > 0:
+            count_pos += 1
 
+    print "[POS] %d / %d = %.3f" % (count_pos_right, count_pos, float(count_pos_right) / count_pos)
     print "[NEG] %d / %d = %.3f" % (count_neg_right, count_neg, float(count_neg_right) / count_neg)
+
+
+def test_xueqiu_stock(stock):
+    url = "http"
+    comment = read_data.read_sqlite(stock)
+    for c in comment:
+        print "\n---------------------"
+        print c
+
+        if not c.__contains__(url):
+            r = sentiment.compute(c)
+            if r > 0:
+                print '[POS] %.3f' % r
+            else:
+                print '[NEG] %.3f' % r
+
+        else:
+            print '[该语句不是评论]'
 
 
 if __name__ == "__main__":
@@ -151,35 +203,20 @@ if __name__ == "__main__":
 
     # test()
 
-    # tese_lqj()
+    tese_lqj()
+
+    # test_xueqiu_stock("SH600030")
 
     print "%.3f" % ((time.time() - begin) / 60), "min"
 
-    comment = read_data.read_sqlite()
-    for c in comment:
-        print "\n---------------------"
-        print c
-
-    # import json
+    # zhi_pos = '/home/zhangxin/文档/市场情绪分析/情感词典/stanford/[分拆整理添加]senti_pos.txt'
+    # writer_zhi = open('/home/zhangxin/文档/市场情绪分析/情感词典/stanford/[分拆整理添加]senti_pos_weight.txt', 'wb')
     #
-    # jf = '[{"comment": "什么是最近牛股特征？注意一下几个因素：入口、卡位、多业态、技术垄断。$乐视网(SZ300104)$ "}]'
-    # jf1 = jf[jf.index("[")+1:jf.index("]")]
-    # print jf1
-    # j = json.loads(jf1)
-    # print type(j)
-    # print j['comment']
-
-    # print len(u'你好')
+    # for s in open(zhi_pos):
     #
-    # zhi_path = "/home/zhangxin/文档/市场情绪分析/情感词典/知网/pos.txt"
-    # zhi = "/home/zhangxin/文档/市场情绪分析/情感词典/stanford/zhi_pos.txt"
-    # writer_zhi = open(zhi,"wb")
-    #
-    # for d in open(zhi_path):
-    #     d = d.decode("utf-8").strip("\n")
-    #     if len(d) > 2:
-    #         print "%s  %d"%(d, len(d))
-    #         writer_zhi.write(d+"\n")
+    #     temp = s.decode("utf-8").split("\t")
+    #     if len(temp) < 2:
+    #         writer_zhi.write(s.strip()+"\t"+"0.5\n")
     #
     # writer_zhi.flush()
     # writer_zhi.close()
