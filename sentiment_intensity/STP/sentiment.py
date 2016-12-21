@@ -22,7 +22,7 @@ def __com(tree):
     if tree.height() == 2:
         pos = tree.label()
         word = tree[0]
-        print pos, word
+        # print pos, word
         # tree.set_label(tree[0])
         # tree.pop()
         if pos == "AD" and dicts.deg_dict.has_key(word):
@@ -48,7 +48,7 @@ def __com(tree):
             senti, flag_in = __com(child)
             senti = float(senti)
 
-            print "| %5s |  %6.2f  |  %5s  |  %6.2f  |  %5s  |" % (child.label(), temp, flag_out, senti, flag_in)
+            # print "| %5s |  %6.2f  |  %5s  |  %6.2f  |  %5s  |" % (child.label(), temp, flag_out, senti, flag_in)
 
             if flag_out == "/":  # 外层为转折词, 则不做改变
                 temp = temp
@@ -94,16 +94,26 @@ def compute(sentence):
     seg = jieba.cut(sentence)
     string_seg = " ".join(seg)
 
+    result = sfp.parser(string_seg)
+    for r in result:
+        # print "|  %5s  | %6s |  %5s  | %6s |  %5s  |" % ("关系", "外层情感值", "外层操作", "内层情感值", "内层操作")
+        result = __com(r)  # 计算情感值
+
+        # print result
+        # r.draw()
+        return result[0]
+
+
+def compute_seg(sentence):
+
     try:
-        result = sfp.parser(string_seg)
+        result = sfp.parser(sentence)
         for r in result:
-            print "|  %5s  | %6s |  %5s  | %6s |  %5s  |" % ("关系", "外层情感值", "外层操作", "内层情感值", "内层操作")
+            # print "|  %5s  | %6s |  %5s  | %6s |  %5s  |" % ("关系", "外层情感值", "外层操作", "内层情感值", "内层操作")
             result = __com(r)  # 计算情感值
 
-            print result
-            r.draw()
-        return result
-
+            # print result
+            # r.draw()
+            return result[0]
     except Exception:
-        return "Kong"
-
+        return 0.0

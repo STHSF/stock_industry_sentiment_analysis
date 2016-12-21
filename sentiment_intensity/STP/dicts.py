@@ -40,7 +40,7 @@ def dict():
             deg_dict[w] = temp[0]
 
     for s in open(s_path):
-        temp = s.decode("utf-8").split(" ")
+        temp = s.decode("utf-8").split("\t")
         senti_dict[temp[0]] = float(temp[1])
 
     for f in open(f_path):

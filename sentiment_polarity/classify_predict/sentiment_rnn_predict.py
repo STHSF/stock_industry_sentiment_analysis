@@ -7,7 +7,8 @@
 
 import tensorflow as tf
 
-from sentiment_polarity.data_processing import input_data, globe
+from sentiment_polarity.data_processing import input_data
+import globe
 
 # set random seed for comparing the two result calculations
 tf.set_random_seed(1)

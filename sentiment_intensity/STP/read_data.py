@@ -10,6 +10,33 @@
 # -------------------------------------------
 import jieba
 import re
+import sqlite3
+import json
+
+
+# 读取sqllite数据
+def read_sqlite():
+    # cx = sqlite3.connect("/home/zhangxin/文档/市场情绪分析/xueqiu_clear.db")
+    cx = sqlite3.connect("/Users/li/workshop/DataSet/sentiment/xueqiuclear.db")
+    cu = cx.cursor()
+    query_str = "select created_at,clean_data from SH600004"
+    cu.execute(query_str)
+    result = cu.fetchall()
+
+    a = "\$.*?\$"
+
+    comment_result = []
+    for r in result:
+        time = r[0]
+        comment = r[1].rstrip(" ").rstrip("\n")
+
+        comment = comment[comment.index(": \"") + 3:comment.index("\"}")]
+        comment = re.sub(a, "", comment)
+
+        if len(comment) < 250:
+            comment_result.append(comment)
+
+    return comment_result
 
 
 # 读取本地雪球评论数据
