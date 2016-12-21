@@ -21,8 +21,8 @@ sys.setdefaultencoding("utf-8")
 path_dit = {
     'path_to_jar': u"/home/zhangxin/work/stanford/jars/stanford-parser.jar",
     'path_to_models_jar': u"/home/zhangxin/work/stanford/jars/stanford-parser-3.6.0-models.jar",
-    'model_path': u"/home/zhangxin/work/stanford/jars/edu/chinesePCFG.ser.gz"
-    # 'model_path': u"/home/zhangxin/work/stanford/jars/edu/chineseFactored.ser.gz"
+    # 'model_path': u"/home/zhangxin/work/stanford/jars/edu/chinesePCFG.ser.gz"
+    'model_path': u"/home/zhangxin/work/stanford/jars/edu/chineseFactored.ser.gz"
 }
 
 
