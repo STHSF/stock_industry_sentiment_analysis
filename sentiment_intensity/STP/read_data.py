@@ -15,11 +15,10 @@ import json
 
 
 # 读取sqllite数据
-def read_sqlite():
-    # cx = sqlite3.connect("/home/zhangxin/文档/市场情绪分析/xueqiu_clear.db")
-    cx = sqlite3.connect("/Users/li/workshop/DataSet/sentiment/xueqiuclear.db")
+def read_sqlite(stock):
+    cx = sqlite3.connect("/home/zhangxin/文档/市场情绪分析/xueqiu_clear.db")
     cu = cx.cursor()
-    query_str = "select created_at,clean_data from SH600004"
+    query_str = "select created_at,clean_data from %s" % stock
     cu.execute(query_str)
     result = cu.fetchall()
 
@@ -35,7 +34,8 @@ def read_sqlite():
 
         if len(comment) < 250:
             comment_result.append(comment)
-
+    cu.close()
+    cx.close()
     return comment_result
 
 

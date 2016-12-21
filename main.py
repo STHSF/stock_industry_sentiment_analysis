@@ -11,8 +11,8 @@ from sentiment_intensity.STP import sentiment
 from sentiment_intensity.STP import dicts
 from sentiment_intensity.STP import read_data
 
-cx = sqlite3.connect("/Users/li/workshop/DataSet/sentiment/xueqiuclear.db")
-cu = cx.cursor()
+conn = sqlite3.connect("/Users/li/workshop/DataSet/sentiment/xueqiuclear.db")
+cu = conn.cursor()  # 创建游标
 # query_str = "select created_at,clean_data from SH600004 where created_at='1440162062000'"
 # query_str = "select created_at,clean_data from SH600004 where created_at='1451802826000'"
 query_str = "select created_at,clean_data from SH600004"

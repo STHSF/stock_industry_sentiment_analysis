@@ -94,14 +94,19 @@ def compute(sentence):
     seg = jieba.cut(sentence)
     string_seg = " ".join(seg)
 
-    result = sfp.parser(string_seg)
-    for r in result:
-        # print "|  %5s  | %6s |  %5s  | %6s |  %5s  |" % ("关系", "外层情感值", "外层操作", "内层情感值", "内层操作")
-        result = __com(r)  # 计算情感值
+    try:
+        result = sfp.parser(string_seg)
+        for r in result:
+            # print unicode(r)
+            # print "|  %5s  | %6s |  %5s  | %6s |  %5s  |" % ("关系", "外层情感值", "外层操作", "内层情感值", "内层操作")
 
-        # print result
-        # r.draw()
-        return result[0]
+            result = __com(r)  # 计算情感值
+
+            # print result
+            # r.draw()
+            return result[0]
+    except Exception:
+        return 0.0
 
 
 def compute_seg(sentence):
@@ -109,11 +114,7 @@ def compute_seg(sentence):
     try:
         result = sfp.parser(sentence)
         for r in result:
-            # print "|  %5s  | %6s |  %5s  | %6s |  %5s  |" % ("关系", "外层情感值", "外层操作", "内层情感值", "内层操作")
             result = __com(r)  # 计算情感值
-
-            # print result
-            # r.draw()
             return result[0]
     except Exception:
         return 0.0

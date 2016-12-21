@@ -59,3 +59,8 @@ def dict():
     jieba.add_word(unicode("非公开"))
     jieba.add_word(unicode("审核通过"))
     jieba.add_word(unicode("加仓"))
+    jieba.add_word(unicode("没潜力"))
+    jieba.add_word(unicode("没动力"))
+    jieba.add_word(unicode("肿么了"))
+    jieba.add_word(unicode("创新低"))
+    jieba.add_word(unicode("不成人形"))
