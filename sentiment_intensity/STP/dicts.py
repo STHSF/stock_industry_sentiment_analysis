@@ -9,6 +9,7 @@
 # Time: 16-12-14 下午5:20
 # -------------------------------------------
 import jieba
+import globe
 
 deg_dict = {}     # 程度副词
 senti_dict = {}   # 情感词
@@ -65,17 +66,9 @@ def init():
         word_add.add(l.strip("\n"))
 
     # 结巴添加新词
-    # jieba.add_word(unicode("淡定"))
-    # jieba.add_word(unicode("非公开"))
-    # jieba.add_word(unicode("审核通过"))
-    # jieba.add_word(unicode("加仓"))
-    # jieba.add_word(unicode("没潜力"))
-    # jieba.add_word(unicode("没动力"))
-    # jieba.add_word(unicode("肿么了"))
-    # jieba.add_word(unicode("创新低"))
-    # jieba.add_word(unicode("不成人形"))
-    # jieba.add_word(unicode("不起来"))
-    # jieba.add_word(unicode("涨不过"))
+    jieba.add_word(unicode("淡定"))
+    jieba.add_word(unicode("非公开"))
+    jieba.add_word(unicode("不成人形"))
 
     for w in word_add:
         jieba.add_word(w)

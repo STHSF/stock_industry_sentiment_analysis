@@ -27,7 +27,6 @@ path_dit = {
 
 # path_dit = globe.path_dit
 
-
 # 句法分析
 def parser(sentence):
     chi_parser = StanfordParser(path_to_jar=path_dit.get('path_to_jar'),

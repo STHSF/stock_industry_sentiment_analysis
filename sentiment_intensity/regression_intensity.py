@@ -48,7 +48,7 @@ word2vec_model.train([['托单','托单', '托单','托单']])
 #     try:
 #         data_list.append(word2vec_model[word].reshape(1, n_dim))
 #     except KeyError:
-#         word2vec_model.train(word)
+#         word2vec_model.train_op(word)
 
 print len(data_list)
 print len(data_x)

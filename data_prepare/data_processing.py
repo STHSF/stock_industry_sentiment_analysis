@@ -117,6 +117,6 @@ def do():
 
 if __name__ == "__main__":
     # do()
-    re = read_source_data('/Users/li/workshop/DataSet/sentiment/train/test.txt')
+    re = read_source_data('/Users/li/workshop/DataSet/sentiment/train_op/test.txt')
     for i in re[1]:
         print i,

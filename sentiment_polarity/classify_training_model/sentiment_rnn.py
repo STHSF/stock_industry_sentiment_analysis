@@ -17,9 +17,10 @@ tf.set_random_seed(1)
 training_data = input_data.read_data_sets()
 
 # hyper_parameters
-lr = 0.001
+lr = 5e-3
 training_iters = 100000
 batch_size = 100
+max_grad_norm = 5
 
 # n_inputs = globe.n_dim  # data input size，输入层神经元, 词向量的维度
 embeding_size = globe.n_dim  # data input size，输入层神经元
@@ -71,23 +72,17 @@ def rnn(input_data, weights, biases, is_training=True):
     ##########################################
     # basic LSTM Cell.
     lstm_cell = tf.nn.rnn_cell.BasicLSTMCell(n_hidden_units, forget_bias=1.0, state_is_tuple=True)
-
     # DropoutWrapper
     if is_training and keep_prob < 1:
         lstm_cell = tf.nn.rnn_cell.DropoutWrapper(lstm_cell, output_keep_prob=keep_prob)
-
     lstm_cell = tf.nn.rnn_cell.MultiRNNCell([lstm_cell] * num_layers, state_is_tuple=True)
-
     # lstm cell is divided into two parts (c_state, h_state)
     _init_state = lstm_cell.zero_state(batch_size, dtype=tf.float32)
-
     if is_training and keep_prob < 1:
         data_in = tf.nn.dropout(data_in, keep_prob)
-
     # dynamic_rnn receive Tensor (batch, steps, inputs) or (steps, batch, inputs) as data_in.
     # Make sure the time_major is changed accordingly.
     outputs, final_state = tf.nn.dynamic_rnn(lstm_cell, data_in, initial_state=_init_state, time_major=False)
-
     # hidden layer for output as the final results
     #############################################
     # results = tf.matmul(final_state[1], weights['out']) + biases['out']
@@ -101,15 +96,31 @@ def rnn(input_data, weights, biases, is_training=True):
 
 
 predict = rnn(x, weights, biases)
-cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(predict, y))
-train = tf.train.AdamOptimizer(lr).minimize(cost)
+# loss = tf.nn.sparse_softmax_cross_entropy_with_logits(predict, y, name='sparse_softmax')
+loss = tf.nn.softmax_cross_entropy_with_logits(predict, y, name='softmax')
+cost = tf.reduce_mean(loss) / batch_size
 
-correct_predict = tf.equal(tf.argmax(predict, 1), tf.argmax(y, 1))
-accuracy = tf.reduce_mean(tf.cast(correct_predict, tf.float32))
+
+"""optimizer"""
+# train_op = tf.train.AdamOptimizer(lr).minimize(cost)
+#
+with tf.variable_scope("optimizer") as scope:
+    tvars = tf.trainable_variables()
+    grads, _ = tf.clip_by_global_norm(tf.gradients(cost, tvars), max_grad_norm)  # 预防梯度爆炸
+    optimizer = tf.train.AdamOptimizer(lr)
+    gradients = zip(grads, tvars)
+    train_op = optimizer.apply_gradients(gradients)
+
+
+with tf.name_scope("Evaluating_accuracy") as scope:
+    correct_predict = tf.equal(tf.argmax(predict, 1), tf.argmax(y, 1))
+    accuracy = tf.reduce_mean(tf.cast(correct_predict, tf.float32))
 
 init = tf.initialize_all_variables()
 
+writer = tf.train.SummaryWriter(globe.rnn_model_log)
 saver = tf.train.Saver()
+
 
 with tf.Session() as sess:
     sess.run(init)
@@ -121,7 +132,7 @@ with tf.Session() as sess:
 
         # print '【前】', batch_xs.shape
         batch_xs = batch_xs.reshape([batch_size, n_steps, embeding_size])
-        sess.run([train], feed_dict={x: batch_xs, y: batch_ys})
+        sess.run([train_op], feed_dict={x: batch_xs, y: batch_ys})
 
         # accuracy
         acc = sess.run(accuracy, feed_dict={x: batch_xs, y: batch_ys})
@@ -143,7 +154,8 @@ with tf.Session() as sess:
 
         # 测试标签和预测标签输出
         for i in range(batch_size):
-            print result[0][i].argmax(), test_batch_ys[i]
+            res = result[0][i].argmax()
+            print res, test_batch_ys[i]
 
         test_accuracy.append(test_acc)
         print "test_acc:", test_acc
@@ -152,14 +164,14 @@ with tf.Session() as sess:
     print "avg_test_acc: ", avg_test_acc
 
     """模型保存"""
-    saver_path = saver.save(sess, globe.model_rnn_path)
-    print "Model saved in file: ", saver_path
+    # saver_path = saver.save(sess, globe.model_rnn_path)
+    # print "Model saved in file: ", saver_path
 
-    # plot train accuracy
+    # plot train_op accuracy
     fig = plt.figure()
     ax = fig.add_subplot(1, 1, 1)
     ax.set_ylim([0, 1.5])
-    lines = ax.plot(acc_array, '.', label='train accuracy')
+    lines = ax.plot(acc_array, '.', label='train_op accuracy')
     lines2 = ax.plot(test_accuracy, '-', label='test accuracy')
     plt.xlabel("Iters")
     plt.ylabel("Accuracy")

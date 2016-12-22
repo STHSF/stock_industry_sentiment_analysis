@@ -6,7 +6,8 @@ from data_prepare import corpus, data_processing
 from gensim.models import Word2Vec
 from tensorflow.contrib.learn.python.learn.datasets import base
 from sentiment_polarity.word2vec_model import doc2vec_gensim_train
-from sentiment_polarity.data_processing import globe
+# from sentiment_polarity.data_processing
+import globe
 
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 
@@ -18,7 +19,7 @@ def _data_read(pos_file_path, neg_file_path, neu_file_path, w2c_model_path):
         neg_file_path: Negative file path.
         w2c_model_path: word2vec model path
     Returns:
-        A list contains train and test data vectors with labels.
+        A list contains train_op and test data vectors with labels.
     Raises:
         IOError: An error occurred accessing the bigtable.Table object.
     """
@@ -170,7 +171,7 @@ def read_data_sets():
     pos_file_path = globe.pos_file_path
     neg_file_path = globe.neg_file_path
     neu_file_path = globe.neu_file_path
-    w2c_model_path = globe.model_path
+    w2c_model_path = globe.w2c_model_path
 
     raw_data = _data_read(pos_file_path, neg_file_path, neu_file_path, w2c_model_path)
 
@@ -194,7 +195,7 @@ def read_data_sets():
     train_labels = train_labels[validation_size:]
 
     train = DataSet(train_data, train_labels)
-    # print train.raw_data[0], train.labels[0]
+    # print train_op.raw_data[0], train_op.labels[0]
     validation = DataSet(validation_data, validation_labels)
     test = DataSet(test_data, test_labels)
 
@@ -208,7 +209,7 @@ def read_data_sets_predict():
     file_seg = corpus.sentence(predict_parent_file)
 
     # 构建word2vec词向量
-    w2c_model_path = globe.model_path
+    w2c_model_path = globe.w2c_model_path
 
     text_vectors = {}
     try:

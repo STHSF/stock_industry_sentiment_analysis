@@ -34,7 +34,8 @@ def read_sqlite(stock):
 
         if len(comment) < 250:
             comment_result.append(comment)
-
+    cu.close()
+    cx.close()
     return comment_result
 
 
