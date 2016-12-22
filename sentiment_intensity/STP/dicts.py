@@ -10,60 +10,72 @@
 # -------------------------------------------
 import jieba
 
-deg_dict = {}
-senti_dict = {}
-eng_dict = {}
-fou_dict = []
-but_dict = []
+deg_dict = {}     # 程度副词
+senti_dict = {}   # 情感词
+eng_dict = {}     # 英语或拼音词
+fou_dict = []     # 否定词
+but_dict = []     # 转折词
+lim_dict = []     # 限定词
 
 
-def dict():
+def init():
+    # path = '/Users/li/workshop/MyRepository/stock_industry_sentiment_analysis/data_warehouse/stanford/jars/stanford/'
+
+    path = '/home/zhangxin/文档/市场情绪分析/情感词典/stanford'
+
     # 读取词典
-    d_path = "/home/zhangxin/文档/市场情绪分析/情感词典/stanford/程度副词_datatang.txt"
-    s_path = "/home/zhangxin/文档/市场情绪分析/情感词典/stanford/senti.txt"
-    f_path = "/home/zhangxin/文档/市场情绪分析/情感词典/stanford/fou.txt"
-    b_path = "/home/zhangxin/文档/市场情绪分析/情感词典/stanford/but.txt"
-    e_path = "/home/zhangxin/文档/市场情绪分析/情感词典/stanford/eng.txt"
+    d_path = path + "/程度副词_datatang.txt"
+    s_path = path + "/senti.txt"
+    f_path = path + "/fou.txt"
+    b_path = path + "/but.txt"
+    e_path = path + "/eng.txt"
+    l_path = path + "/limit.dict"
 
-    path_dic = {
-        'd_path': "/Users/li/workshop/MyRepository/stock_industry_sentiment_analysis/"
-                  "data_warehouse/stanford/jars/stanford/程度副词_datatang.txt",
-        's_path': "/Users/li/workshop/MyRepository/stock_industry_sentiment_analysis/"
-                  "data_warehouse/stanford/jars/stanford/[兰秋军]词典数据.txt",
-        'f_path': "/Users/li/workshop/MyRepository/stock_industry_sentiment_analysis/"
-                  "data_warehouse/stanford/jars/stanford/fou.txt",
-        'b_path': "/Users/li/workshop/MyRepository/stock_industry_sentiment_analysis/"
-                  "data_warehouse/stanford/jars/stanford/but.txt"
-    }
+    # 结巴新词
+    word_add = set()
 
     for d in open(d_path):
         temp = d.decode("utf-8").split(" ")
         word_arr = temp[1].strip("\n").rstrip(" ").split("、")
         for w in word_arr:
-            deg_dict[w] = temp[0]
+            deg_dict[w] = float(temp[0])
+            word_add.add(temp[0])
 
     for s in open(s_path):
-        temp = s.decode("utf-8").split("\t")
+        temp = s.decode("utf-8").split(" ")
         senti_dict[temp[0]] = float(temp[1])
-
-    for f in open(f_path):
-        f = f.decode("utf-8-sig")
-        fou_dict.append(f.strip("\n"))
-
-    for b in open(b_path):
-        but_dict.append(b.strip("\n"))
+        word_add.add(temp[0])
 
     for e in open(e_path):
         temp = e.split(" ")
         eng_dict[temp[0]] = float(temp[1])
+        word_add.add(temp[0])
+
+    for f in open(f_path):
+        f = f.decode("utf-8-sig")
+        fou_dict.append(f.strip("\n"))
+        word_add.add(f.strip("\n"))
+
+    for b in open(b_path):
+        but_dict.append(b.strip("\n"))
+        word_add.add(b.strip("\n"))
+
+    for l in open(l_path):
+        lim_dict.append(l.strip("\n"))
+        word_add.add(l.strip("\n"))
 
     # 结巴添加新词
-    jieba.add_word(unicode("淡定"))
-    jieba.add_word(unicode("非公开"))
-    jieba.add_word(unicode("审核通过"))
-    jieba.add_word(unicode("加仓"))
-    jieba.add_word(unicode("没潜力"))
-    jieba.add_word(unicode("没动力"))
-    jieba.add_word(unicode("肿么了"))
-    jieba.add_word(unicode("创新低"))
-    jieba.add_word(unicode("不成人形"))
+    # jieba.add_word(unicode("淡定"))
+    # jieba.add_word(unicode("非公开"))
+    # jieba.add_word(unicode("审核通过"))
+    # jieba.add_word(unicode("加仓"))
+    # jieba.add_word(unicode("没潜力"))
+    # jieba.add_word(unicode("没动力"))
+    # jieba.add_word(unicode("肿么了"))
+    # jieba.add_word(unicode("创新低"))
+    # jieba.add_word(unicode("不成人形"))
+    # jieba.add_word(unicode("不起来"))
+    # jieba.add_word(unicode("涨不过"))
+
+    for w in word_add:
+        jieba.add_word(w)

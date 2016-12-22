@@ -17,7 +17,6 @@ import globe
 reload(sys)
 sys.setdefaultencoding("utf-8")
 
-
 path_dit = {
     'path_to_jar': u"/home/zhangxin/work/stanford/jars/stanford-parser.jar",
     'path_to_models_jar': u"/home/zhangxin/work/stanford/jars/stanford-parser-3.6.0-models.jar",
