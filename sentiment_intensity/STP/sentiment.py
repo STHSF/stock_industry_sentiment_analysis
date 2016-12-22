@@ -26,11 +26,11 @@ def __com(tree):
         pos = tree.label()
         word = tree[0]
 
-        if pos == "AD" and dicts.deg_dict.has_key(word):
+        if pos == "AD" and (word in dicts.deg_dict):
             return dicts.deg_dict[word], "*"
         elif pos == "AD" and dicts.fou_dict.__contains__(word):
             return 0.0, "-"
-        elif dicts.senti_dict.has_key(word):
+        elif word in dicts.senti_dict:
             return dicts.senti_dict[word], "+"
         elif dicts.but_dict.__contains__(word):
             return 0.0, "/"
@@ -38,16 +38,13 @@ def __com(tree):
             return 0.0, "+"
 
     else:
-        t = tree
-
         temp = 0
         flag_out = "+"
 
-        for i in range(len(t)):
+        for i in range(len(tree)):
 
-            child = t[len(t) - i - 1]  # 先遍历右子树
+            child = tree[len(tree) - i - 1]  # 先遍历右子树
             senti, flag_in = __com(child)
-            # senti = float(senti)
 
             print "| %5s |  %6.2f  |  %5s  |  %6.2f  |  %5s  |" % (child.label(), temp, flag_out, senti, flag_in)
 
@@ -95,11 +92,11 @@ def __com_limit(tree):
         tree.set_label(tree[0])
         tree.pop()
 
-        if pos == "AD" and dicts.deg_dict.has_key(word):
+        if pos == "AD" and (word in dicts.deg_dict):
             return dicts.deg_dict[word], "*"
         elif pos == "AD" and dicts.fou_dict.__contains__(word):
             return 0.0, "-"
-        elif dicts.senti_dict.has_key(word):
+        elif word in dicts.senti_dict:
             if flag:
                 flag = False
                 return -(dicts.senti_dict[word]), "+"
@@ -114,14 +111,13 @@ def __com_limit(tree):
             return 0.0, "+"
 
     else:
-        t = tree
 
         temp = 0
         flag_out = "+"
 
-        for i in range(len(t)):
+        for i in range(len(tree)):
 
-            child = t[len(t) - i - 1]  # 先遍历右子树
+            child = tree[len(tree) - i - 1]  # 先遍历右子树
             senti, flag_in = __com_limit(child)
 
             # print "| %5s |  %6.2f  |  %5s  |  %6.2f  |  %5s  |" % (child.label(), temp, flag_out, senti, flag_in)
@@ -155,7 +151,7 @@ def __com_limit(tree):
                 else:
                     temp = -temp
 
-        if t.label() == "IP":  # Flag归负，保证限定词只作用于一个IP
+        if tree.label() == "IP":  # Flag归负，保证限定词只作用于一个IP
             flag = False
 
         return temp, flag_out
@@ -165,7 +161,7 @@ def compute(sentence):
     # 去停去空格，让句子过English词典
     sentence_filter = sentence.strip().replace("?", "").replace("!", "") \
         .replace(".", "").replace("。", "").replace("，", "")
-    if dicts.eng_dict.has_key(sentence_filter):
+    if sentence_filter in dicts.eng_dict:
         return dicts.eng_dict.get(sentence_filter, 0)
 
     # 分词
@@ -191,7 +187,7 @@ def compute_test(sentence):
     # 去停去空格，让句子过English词典
     sentence_filter = sentence.strip().replace("?", "").replace("!", "") \
         .replace(".", "").replace("。", "").replace("，", "")
-    if dicts.eng_dict.has_key(sentence_filter):
+    if sentence_filter in dicts.eng_dict:
         return dicts.eng_dict.get(sentence_filter, 0)
 
     # 分词

@@ -41,7 +41,6 @@ def test_xueqiu():
 
         if not d[0].__contains__(u"观望"):
             result = sentiment.compute(d[1])
-            print ">>>"
 
 if __name__ == "__main__":
     begin = time.time()

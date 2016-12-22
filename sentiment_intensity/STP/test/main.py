@@ -192,10 +192,15 @@ if __name__ == "__main__":
 
     # test_xueqiu()
 
-    test()
+    # test()
 
     # tese_lqj()
 
     # test_xueqiu_stock("SH600030")
 
     print "%.3f" % ((time.time() - begin) / 60), "min"
+
+    a = {"1":"7","5":"8","6":"9"}
+    b = "9"
+    if b in a:
+        print "Ok"
