@@ -8,16 +8,17 @@
 # File: main.py
 # Time: 16-12-14 下午5:16
 # -------------------------------------------
-import sentiment
-import read_data
-import jieba
 import time
-import dicts
-import re
+
+import jieba
+
+import read_data
+import sentiment_intensity.STP.dicts as dicts
+import sentiment_intensity.STP.sentiment as sentiment
 
 
 def test_xueqiu():
-    # writer_result = open("/home/zhangxin/文档/市场情绪分析/基于依存句法分析/result_5.txt", "wb")
+    writer_result = open("/home/zhangxin/文档/市场情绪分析/基于依存句法分析/result_6.txt", "wb")
 
     data = read_data.read_xueqiu()
 
@@ -38,38 +39,17 @@ def test_xueqiu():
     count = 1
     for d in data:
 
-        # print "[正在执行]", count
-        # count += 1
-        #
-        # result = sentiment.compute(d[1])
-        #
-        # # if d[0].__contains__(u"做多"):
-        # #     count_p += 1
-        # # elif d[0].__contains__(u"观望"):
-        # #     count_a += 1
-        # # elif d[0].__contains__(u"看空"):
-        # #     count_n += 1
-        # #
-        # # if d[0].__contains__(u"做多"):
-        # #     result_pos.append("%s\t[%6.2f]\t%s\t\n" % (d[0], result, d[1]))
-        # # elif d[0].__contains__(u"看空"):
-        # #     result_neg.append("%s\t[%6.2f]\t%s\t\n" % (d[0], result, d[1]))
-        # # elif d[0].__contains__(u"观望"):
-        # #     result_aaa.append("%s\t[%6.2f]\t%s\t\n" % (d[0], result, d[1]))
-        #
-        # if result > 0 and d[0].__contains__(u"做多"):
-        #     count_p_r += 1
-        # elif result < 0 and d[0].__contains__(u"看空"):
-        #     count_n_r += 1
-
-        # print "[Result]", result, count_p_r, count_n_r
-
         if not d[0].__contains__(u"观望"):
 
             print "[正在执行]", count
             count += 1
 
             result = sentiment.compute(d[1])
+
+            if d[0].__contains__(u"做多"):
+                result_pos.append("%s\t[%6.2f]\t%s\t\n" % (d[0], result, d[1]))
+            elif d[0].__contains__(u"看空"):
+                result_neg.append("%s\t[%6.2f]\t%s\t\n" % (d[0], result, d[1]))
 
             if result > 0 and d[0].__contains__(u"做多"):
                 count_p_r += 1
@@ -83,15 +63,15 @@ def test_xueqiu():
 
             print "[Result]", result, count_p_r, count_n_r
 
-    # for p in result_pos:
-    #     writer_result.write(p)
-    # for n in result_neg:
-    #     writer_result.write(n)
-    # for a in result_aaa:
-    #     writer_result.write(a)
-    #
-    # writer_result.flush()
-    # writer_result.close()
+    for p in result_pos:
+        writer_result.write(p)
+    for n in result_neg:
+        writer_result.write(n)
+    for a in result_aaa:
+        writer_result.write(a)
+
+    writer_result.flush()
+    writer_result.close()
 
     print "[看多] ", count_p, count_p_r, float(count_p_r) / float(count_p)
 
@@ -121,7 +101,6 @@ def test():
     sent = u'今天能收红吗，艹'
     sent = u'滴血的嘴唇露出嗜血的獠牙'
     sent = u'缩量明显，割肉盘加仓小晶，对它有信心'
-    sent = u'缩量明显，割肉盘加仓小晶，对它有信心'
     sent = u'开抢了呵呵'
     sent = u'看来我要把你割了。一看就是没潜力'
     sent = u'好不容易碰到一个板，还被砸成这个样子，我也是醉了'
@@ -136,8 +115,19 @@ def test():
     sent = u'这只股票跌得比谁都快'
     sent = u'昨天跑的太明智了'
     sent = u'暴跌是跌出机会来了，最后一粒子弹也打了亿晶光电'
+    sent = u'下跌空间有限，建底仓'
+    sent = u'买了就跌'
+    sent = u'卖了就涨'
+    sent = u'格力电器真是恨你不起来'
+    sent = u'加仓呀，000875,600252,600537 。'
+    sent = u'这只股票上涨空间有限'
+    sent = u'心好累，这只股票就这样了'
+    sent = u'我肚子饿了，我就不起来'
+    sent = u'心好累，这只股票上涨空间有限'
+    sent = u'龙头股份，涨不过大盘，靠'
+    sent = u'格力电器真是爱不起来'
 
-    result = sentiment.compute(sent)
+    result = sentiment.compute_test(sent)
     print result
 
 
@@ -152,14 +142,15 @@ def tese_lqj():
     count_neg_right = 0
 
     for p in open(pos_path):
-        print "[正在执行 %d]" % count_pos
         p = p.decode("gbk").strip("\n")
+        print "[正在执行 %d]" % count_pos,p
         r = sentiment.compute_seg(p)
         if r > 0:
             count_pos += 1
             count_pos_right += 1
         elif r < 0:
             count_neg += 1
+        print r
 
     for n in open(neg_path):
         print "[正在执行neg %d]" % count_neg
@@ -197,26 +188,19 @@ if __name__ == "__main__":
     begin = time.time()
 
     # 初始化五个词典
-    dicts.dict()
+    dicts.init()
 
     # test_xueqiu()
 
     # test()
 
-    tese_lqj()
+    # tese_lqj()
 
     # test_xueqiu_stock("SH600030")
 
     print "%.3f" % ((time.time() - begin) / 60), "min"
 
-    # zhi_pos = '/home/zhangxin/文档/市场情绪分析/情感词典/stanford/[分拆整理添加]senti_pos.txt'
-    # writer_zhi = open('/home/zhangxin/文档/市场情绪分析/情感词典/stanford/[分拆整理添加]senti_pos_weight.txt', 'wb')
-    #
-    # for s in open(zhi_pos):
-    #
-    #     temp = s.decode("utf-8").split("\t")
-    #     if len(temp) < 2:
-    #         writer_zhi.write(s.strip()+"\t"+"0.5\n")
-    #
-    # writer_zhi.flush()
-    # writer_zhi.close()
+    a = {"1":"7","5":"8","6":"9"}
+    b = "9"
+    if b in a:
+        print "Ok"
