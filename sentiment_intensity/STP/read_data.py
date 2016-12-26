@@ -11,31 +11,32 @@
 import jieba
 import re
 import sqlite3
-import json
+import demjson
 
 
-# 读取sqllite数据
-def read_sqlite(stock):
-    cx = sqlite3.connect("/home/zhangxin/文档/市场情绪分析/xueqiu_clear.db")
-    cu = cx.cursor()
-    query_str = "select created_at,clean_data from %s" % stock
+# 读取sqlite数据
+def read_sqlite(db_path, stock):
+    conn = sqlite3.connect(db_path)
+    cu = conn.cursor()
+    query_str = "select created_at,clean_data from %s WHERE created_at='1451669308000'" % stock
     cu.execute(query_str)
     result = cu.fetchall()
 
-    a = "\$.*?\$"
-
     comment_result = []
-    for r in result:
-        time = r[0]
-        comment = r[1].rstrip(" ").rstrip("\n")
-
-        comment = comment[comment.index(": \"") + 3:comment.index("\"}")]
-        comment = re.sub(a, "", comment)
-
-        if len(comment) < 250:
-            comment_result.append(comment)
+    for i in xrange(len(result)):
+        time = result[i][0]
+        print result[i][1]
+        res = demjson.decode(result[i][1].replace("\n", ""))
+        print len(res)
+        for j in xrange(len(res)):
+            comment = res[j]['comment']
+            # comment_result.append((time, comment))
+            if len(comment) < 25000:
+                print time
+                print comment
+                comment_result.append((time, comment))
     cu.close()
-    cx.close()
+    conn.close()
     return comment_result
 
 
