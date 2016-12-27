@@ -18,23 +18,25 @@ import demjson
 def read_sqlite(db_path, stock):
     conn = sqlite3.connect(db_path)
     cu = conn.cursor()
-    query_str = "select created_at,clean_data from %s WHERE created_at='1451669308000'" % stock
+    # query_str = "select created_at,clean_data from %s WHERE created_at='1426662191000'" % stock
+    query_str = "select created_at,clean_data from %s" % stock
     cu.execute(query_str)
     result = cu.fetchall()
-
     comment_result = []
-    for i in xrange(len(result)):
-        time = result[i][0]
-        print result[i][1]
-        res = demjson.decode(result[i][1].replace("\n", ""))
-        print len(res)
-        for j in xrange(len(res)):
-            comment = res[j]['comment']
-            # comment_result.append((time, comment))
-            if len(comment) < 25000:
-                print time
-                print comment
-                comment_result.append((time, comment))
+    try:
+        for i in xrange(len(result)):
+            time = result[i][0]
+            comments = demjson.decode(result[i][1].replace("\n", ""))  # 将字符串使用json格式解码。并将字符中的换行符替换掉。
+            print len(comments)
+            for item in comments:
+                comment = item['comment']  # 循环找出json中含有的comment
+                if len(comment) < 300:
+                    # print time
+                    print comment
+                    # comment_result.append((time, comment))
+                    comment_result.append(comment)  # 将comment内容提取出来
+    except:
+        pass
     cu.close()
     conn.close()
     return comment_result

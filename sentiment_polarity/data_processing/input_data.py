@@ -8,6 +8,7 @@ from tensorflow.contrib.learn.python.learn.datasets import base
 from sentiment_polarity.word2vec_model import doc2vec_gensim_train
 # from sentiment_polarity.data_processing
 import globe
+import re
 
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 
@@ -218,7 +219,6 @@ def read_data_sets_predict():
         for title in file_seg.keys():
             # print '【标题】', title
             # print '【正文】', file_seg[title]
-
             doc = file_seg[title]
             doc_vec = doc2vec_gensim_train.doc_vecs_zx(doc, word2vec_model)
             # text_vectors.append(doc_vec)
@@ -232,4 +232,10 @@ def read_data_sets_predict():
 #     return read_data_sets()
 
 if __name__ == '__main__':
-    read_data_sets()
+    # read_data_sets()
+    data = read_data_sets_predict()
+    for title in data.keys():
+        batch_xs = data[title]
+        print batch_xs
+
+

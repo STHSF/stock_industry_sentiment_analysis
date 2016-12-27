@@ -7,7 +7,8 @@
 # corpus
 # input_txt = '/home/zhangxin/work/workplace_python/DeepNaturalLanguageProcessing/DeepNLP/data/input/myInput.txt'
 # output_txt = '/home/zhangxin/work/workplace_python/DeepNaturalLanguageProcessing/DeepNLP/data/input/myOutput.txt'
-stopword = 'data_warehouse/stopword.txt'
+# stopword = 'data_warehouse/stopword.txt'
+stopword = '/Users/li/workshop/MyRepository/stock_industry_sentiment_analysis/data_warehouse/stopword.txt'
 #
 # data_patent = ''
 # data_process_result = '/home/zhangxin/work/workplace_python/DeepSentiment/data/tagging/result.txt'
@@ -88,6 +89,7 @@ model_rnn_path = "/Users/li/workshop/MyRepository/stock_industry_sentiment_analy
 rnn_model_log = "/Users/li/workshop/MyRepository/stock_industry_sentiment_analysis/" \
                  "data_warehouse/classify_model/model_rnn/rnn_model_log"
 # predict_parent_file = 'data/text_predict'
+predict_parent_file = '/Users/li/workshop/StanfordNLP/predict_test'
 
 
 # 语义规则模型

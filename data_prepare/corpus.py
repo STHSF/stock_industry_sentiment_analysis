@@ -99,6 +99,23 @@ def split_sentence(input_file, output_file):
     fout.close()
 
 
+def write_content(data, file_name):
+    """
+    将list数据写到指定的文件中
+    :param data: list
+    :param file_name: 文件目录+文件名
+    :return:
+    """
+    file_out = open(file_name, 'a')
+    for item in xrange(len(data)):
+        try:
+            string = str(item + 1) + '\t' + data[item]
+            file_out.write(string.encode('utf-8') + "\n")
+        except Exception:
+            pass
+    file_out.close()
+
+
 # 文本处理
 def sentence(file_parent_path):
     file_seg = {}
@@ -146,7 +163,7 @@ def filter_stop_word(cut_result):
         seg = seg.decode('utf-8')
         if seg not in stopwords:
             final.append(seg)
-    final_str = " ".join(final)
+    final_str = ",".join(final)  # 逗号隔开。
     return final_str
 
 
@@ -164,15 +181,15 @@ def do():
     sentence("/home/zhangxin/work/DeepSentiment/data/tagging/pos", out_pos)
 
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
     # result = sentence('/home/zhangxin/work/workplace_python/DeepSentiment/data/predict_test/')
     # for r in result:
     #     print r
 
-    sentence = "我喜欢中国。我讨厌,日，本"
-
-    res = re.split(",|。|，", sentence)
-    for i in res:
-        print i
-
+    # sentence = "我喜欢中国。我讨厌,日，本"
+    #
+    # res = re.split(",|。|，", sentence)
+    # for i in res:
+    #     print i
+#
 

@@ -164,8 +164,8 @@ with tf.Session() as sess:
     print "avg_test_acc: ", avg_test_acc
 
     """模型保存"""
-    # saver_path = saver.save(sess, globe.model_rnn_path)
-    # print "Model saved in file: ", saver_path
+    saver_path = saver.save(sess, globe.model_rnn_path)
+    print "Model saved in file: ", saver_path
 
     # plot train_op accuracy
     fig = plt.figure()

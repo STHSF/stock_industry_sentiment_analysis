@@ -9,12 +9,15 @@ import demjson
 from data_prepare import corpus
 from sentiment_intensity.STP import sentiment
 from sentiment_intensity.STP import dicts
-from sentiment_intensity.STP import read_data
+from sentiment_intensity.STP.test import read_data
+from data_prepare import corpus
 
 db_path = "/Users/li/workshop/DataSet/sentiment/xueqiuclear.db"
-stock = 'SH600004'
+stock_list = 'SH6000' + '08'
 
-read_data.read_sqlite(db_path, stock)
+res = read_data.read_sqlite(db_path, stock_list)
+corpus.write_content(res, "/Users/li/workshop/DataSet/test/test.txt")
+
 
 
 #
