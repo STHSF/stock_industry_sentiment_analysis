@@ -9,31 +9,14 @@ import demjson
 from data_prepare import corpus
 from sentiment_intensity.STP import sentiment
 from sentiment_intensity.STP import dicts
-from sentiment_intensity.STP import read_data
+from sentiment_intensity.STP.test import read_data
+from data_prepare import corpus
 
-conn = sqlite3.connect("/Users/li/workshop/DataSet/sentiment/xueqiuclear.db")
-cu = conn.cursor()  # 创建游标
-# query_str = "select created_at,clean_data from SH600004 where created_at='1440162062000'"
-# query_str = "select created_at,clean_data from SH600004 where created_at='1451802826000'"
-query_str = "select created_at,clean_data from SH600004"
-cu.execute(query_str)
-result = cu.fetchall()
+db_path = "/Users/li/workshop/DataSet/sentiment/xueqiuclear.db"
+stock_list = 'SH6000' + '08'
 
-comment_result = []
-
-for i in result:
-    print i[0]
-    print i[1]
-    time = i[0]
-    res = demjson.decode(i[1].strip('\n'))
-    print len(res)
-    for j in xrange(len(res)):
-        comment = res[j]['comment']
-        print comment
-        comment_result.append((time, comment))
-
-# print comment_result[0][0]
-# print comment_result[0][1]
+res = read_data.read_sqlite(db_path, stock_list)
+corpus.write_content(res, "/Users/li/workshop/DataSet/test/test.txt")
 
 
 
