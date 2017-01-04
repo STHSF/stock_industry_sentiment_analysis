@@ -1,4 +1,7 @@
 # coding=utf-8
+"""
+解析程序，解析xueqiuclear.db中text里面的评论数据，将每条评论中所有的短评提取出来，没有区分评论是谁写的或者评论发表的时间。
+"""
 import sqlite3
 import demjson
 from BeautifulSoup import BeautifulSoup
@@ -63,9 +66,9 @@ def save2sqlite():
 
 if __name__ == '__main__':
     db_path = "/Users/li/workshop/DataSet/sentiment/xueqiuclear.db"
-    for i in xrange(3999):
+    for i in xrange(600):
         try:
-            stock_list = 'SH600%s' % i
+            stock_list = 'SZ300%s' % i
             file_path = "/Users/li/workshop/DataSet/test/%s" % stock_list
             print stock_list
             print file_path
