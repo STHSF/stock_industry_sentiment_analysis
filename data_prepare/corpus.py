@@ -163,7 +163,7 @@ def filter_stop_word(cut_result):
         seg = seg.decode('utf-8')
         if seg not in stopwords:
             final.append(seg)
-    final_str = ",".join(final)  # 逗号隔开。
+    final_str = "".join(final)  # 逗号隔开。
     return final_str
 
 

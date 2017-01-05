@@ -97,6 +97,13 @@ predict_parent_file = '/home/zhangxin/work/workplace_python/DeepSentiment/DeepNa
 
 
 # 语义规则模型
+
+# path_dit = {
+#     'path_to_jar': u"/home/zhangxin/work/stanford/jars/stanford-parser.jar",
+#     'path_to_models_jar': u"/home/zhangxin/work/stanford/jars/stanford-parser-3.6.0-models.jar",
+#     # 'model_path': u"/home/zhangxin/work/stanford/jars/edu/chinesePCFG.ser.gz"
+#     'model_path': u"/home/zhangxin/work/stanford/jars/edu/chineseFactored.ser.gz"
+# }
 path_dit = {
     'path_to_jar': u"/Users/li/workshop/StanfordNLP/stanford/jars/stanford-parser.jar",
     'path_to_models_jar': u"/Users/li/workshop/StanfordNLP/stanford/jars/stanford-parser-3.6.0-models.jar",
