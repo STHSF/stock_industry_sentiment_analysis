@@ -33,7 +33,7 @@ def test_xueqiu_multi():
 
 
 def test_xueqiu():
-    data = read_data.read_xueqiu()
+    data = read_data.read_xueqiu()[:30]
 
     print len(data)
 
@@ -49,5 +49,6 @@ if __name__ == "__main__":
     dicts.init()
 
     test_xueqiu_multi()
+    # test_xueqiu()
 
     print "%.3f" % ((time.time() - begin) / 60), "min"

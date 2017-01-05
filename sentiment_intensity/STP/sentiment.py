@@ -158,6 +158,7 @@ def __com_limit(tree):
 
 
 def compute(sentence):
+    print sentence
     # 去停去空格，让句子过English词典
     sentence_filter = sentence.strip().replace("?", "").replace("!", "") \
         .replace(".", "").replace("。", "").replace("，", "")

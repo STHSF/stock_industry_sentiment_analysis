@@ -236,6 +236,6 @@ if __name__ == '__main__':
     data = read_data_sets_predict()
     for title in data.keys():
         batch_xs = data[title]
-        print batch_xs
+        print title
 
 

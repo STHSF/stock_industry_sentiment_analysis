@@ -7,9 +7,10 @@
 # corpus
 # input_txt = '/home/zhangxin/work/workplace_python/DeepNaturalLanguageProcessing/DeepNLP/data/input/myInput.txt'
 # output_txt = '/home/zhangxin/work/workplace_python/DeepNaturalLanguageProcessing/DeepNLP/data/input/myOutput.txt'
-# stopword = 'data_warehouse/stopword.txt'
-stopword = '/Users/li/workshop/MyRepository/stock_industry_sentiment_analysis/data_warehouse/stopword.txt'
-#
+stopword = '/home/zhangxin/work/workplace_python/stock_industry_sentiment_analysis/data_warehouse/stopword.txt'
+# stopword = '/Users/li/workshop/MyRepository/stock_industry_sentiment_analysis/data_warehouse/stopword.txt'
+
+
 # data_patent = ''
 # data_process_result = '/home/zhangxin/work/workplace_python/DeepSentiment/data/tagging/result.txt'
 #
@@ -65,7 +66,8 @@ stopword = '/Users/li/workshop/MyRepository/stock_industry_sentiment_analysis/da
 # file_neg = '/Users/li/workshop/MyRepository/DeepNaturalLanguageProcessing/DeepNLP/data/test3.txt'
 # file_pos = '/Users/li/workshop/MyRepository/DeepNaturalLanguageProcessing/DeepNLP/data/test2.txt'
 # w2c_model_path = '/Users/li/workshop/MyRepository/DeepNaturalLanguageProcessing/DeepNLP/word2vecmodel/model'
-w2c_model_path = '/Users/li/workshop/MyRepository/stock_industry_sentiment_analysis/data_warehouse/word2vec_model/w2cmodel2'
+# w2c_model_path = '/Users/li/workshop/MyRepository/stock_industry_sentiment_analysis/data_warehouse/word2vec_model/w2cmodel2'
+w2c_model_path = '/home/zhangxin/work/workplace_python/stock_industry_sentiment_analysis/data_warehouse/word2vec_model/w2cmodel'
 
 # w2v模型的参数
 n_dim = 200
@@ -73,26 +75,29 @@ min_count = 1
 num_classes = 3
 
 
-pos_file_path = '/Users/li/workshop/DataSet/sentiment/train/result_pos.txt'
-neg_file_path = '/Users/li/workshop/DataSet/sentiment/train/result_neg.txt'
-neu_file_path = '/Users/li/workshop/DataSet/sentiment/train/result_neu.txt'
+# pos_file_path = '/Users/li/workshop/DataSet/sentiment/train/result_pos.txt'
+# neg_file_path = '/Users/li/workshop/DataSet/sentiment/train/result_neg.txt'
+# neu_file_path = '/Users/li/workshop/DataSet/sentiment/train/result_neu.txt'
 #
-# pos_file_path = '/home/zhangxin/work/workplace_python/DeepSentiment/data/train_op/result_pos.txt'
-# neg_file_path = '/home/zhangxin/work/workplace_python/DeepSentiment/data/train_op/result_neg.txt'
-# neu_file_path = '/home/zhangxin/work/workplace_python/DeepSentiment/data/train_op/result_neu.txt'
+pos_file_path = '/home/zhangxin/work/workplace_python/DeepSentiment/data/train/result_pos.txt'
+neg_file_path = '/home/zhangxin/work/workplace_python/DeepSentiment/data/train/result_neg.txt'
+neu_file_path = '/home/zhangxin/work/workplace_python/DeepSentiment/data/train/result_neu.txt'
 
 
 # 预测
-# model_rnn_path = '../data_warehouse/classify_model/model_rnn/model.ckpt'
-model_rnn_path = "/Users/li/workshop/MyRepository/stock_industry_sentiment_analysis/" \
-                 "data_warehouse/classify_model/model_rnn/rnn_model"
+model_rnn_path = '/home/zhangxin/work/workplace_python/stock_industry_sentiment_analysis' \
+                 '/data_warehouse/classify_model/model_rnn/rnn_model'
+# model_rnn_path = "/Users/li/workshop/MyRepository/stock_industry_sentiment_analysis/" \
+#                  "data_warehouse/classify_model/model_rnn/rnn_model"
 rnn_model_log = "/Users/li/workshop/MyRepository/stock_industry_sentiment_analysis/" \
                  "data_warehouse/classify_model/model_rnn/rnn_model_log"
-# predict_parent_file = 'data/text_predict'
-predict_parent_file = '/Users/li/workshop/StanfordNLP/predict_test'
+predict_parent_file = '/home/zhangxin/work/workplace_python/DeepSentiment/DeepNaturalLanguageProcessing/' \
+                      'DeepNLP/sentiment_analysis_zh/data/text_predict'
+# predict_parent_file = '/Users/li/workshop/StanfordNLP/predict_test'
 
 
 # 语义规则模型
+
 # path_dit = {
 #     'path_to_jar': u"/home/zhangxin/work/stanford/jars/stanford-parser.jar",
 #     'path_to_models_jar': u"/home/zhangxin/work/stanford/jars/stanford-parser-3.6.0-models.jar",

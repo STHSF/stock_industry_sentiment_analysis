@@ -126,6 +126,7 @@ def test():
     sent = u'心好累，这只股票上涨空间有限'
     sent = u'龙头股份，涨不过大盘，靠'
     sent = u'格力电器真是爱不起来'
+    sent = u'格力电器真是爱你不起来'
 
     result = sentiment.compute_test(sent)
     print result
@@ -143,7 +144,7 @@ def tese_lqj():
 
     for p in open(pos_path):
         p = p.decode("gbk").strip("\n")
-        print "[正在执行 %d]" % count_pos,p
+        print "[正在执行 %d]" % count_pos, p
         r = sentiment.compute_seg(p)
         if r > 0:
             count_pos += 1
@@ -184,11 +185,24 @@ def test_xueqiu_stock(stock):
             print '[该语句不是评论]'
 
 
+def add_sentiment():
+    word = {}
+    for z in open("/home/zhangxin/文档/市场情绪分析/情感词典/服务器（雪球评论+知网）/zhi_neg_2(已经整理).txt"):
+        z = z.decode("utf-8")
+        z = z.split("\t")
+        word[z[0]] = -0.5
+
+    return word
+
+
 if __name__ == "__main__":
     begin = time.time()
 
     # 初始化五个词典
     dicts.init()
+    add_words = add_sentiment()
+    temp = dict(dicts.senti_dict.items() + add_words.items())
+    dicts.senti_dict = temp
 
     # test_xueqiu()
 
@@ -200,7 +214,7 @@ if __name__ == "__main__":
 
     print "%.3f" % ((time.time() - begin) / 60), "min"
 
-    a = {"1":"7","5":"8","6":"9"}
-    b = "9"
-    if b in a:
-        print "Ok"
+    # dict1 = {1: [1, 11, 111], 2: [2, 22, 222]}
+    # dict2 = {3: [3, 33, 333], 4: [4, 44, 444]}
+    #
+    # dictMerged1 = dict(dict1.items() + dict2.items())

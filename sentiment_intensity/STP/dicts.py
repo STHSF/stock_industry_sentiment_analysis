@@ -9,7 +9,6 @@
 # Time: 16-12-14 下午5:20
 # -------------------------------------------
 import jieba
-import globe
 
 deg_dict = {}     # 程度副词
 senti_dict = {}   # 情感词
