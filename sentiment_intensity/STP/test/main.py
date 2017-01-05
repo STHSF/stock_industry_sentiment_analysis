@@ -192,7 +192,7 @@ if __name__ == "__main__":
 
     # test_xueqiu()
 
-    # test()
+    test()
 
     # tese_lqj()
 

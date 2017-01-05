@@ -20,8 +20,7 @@ lim_dict = []     # 限定词
 
 
 def init():
-    path = '/Users/li/workshop/MyRepository/stock_industry_sentiment_analysis/data_warehouse/stanford/jars/stanford/'
-    #
+    path = '/Users/li/workshop/StanfordNLP/stanfordcorpus'
     # path = '/home/zhangxin/文档/市场情绪分析/情感词典/stanford'
 
     # 读取词典

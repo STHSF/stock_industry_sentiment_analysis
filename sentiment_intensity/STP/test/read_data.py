@@ -13,61 +13,91 @@ import re
 import sqlite3
 import demjson
 import json
+from sentiment_intensity.STP import sentiment
+from sentiment_intensity.STP import dicts
 
-contents = []
 
+class jsonFile(object):
 
-def hJson(json_file):
-    # 判断传入的是否是json对象，不是json对象就返回异常
-    if isinstance(json_file, dict):
-        for key in json_file.keys():
-            key_value = json_file.get(key)
-            if isinstance(key_value, dict):
-                hJson(key_value)
-            elif isinstance(key_value, list):
-                for json_array in key_value:
-                    hJson(json_array)
-            else:
-                contents.append(str(key) + " = " + str(key_value))
-    elif isinstance(json_file, list):
-        for input_json_array in json_file:
-            hJson(input_json_array)
-    return contents
+    def __init__(self):
+        self.contents = []
+        self.i = 0
+
+    def hJson(self, json_file):
+        # 判断传入的是否是json对象，不是json对象就返回异常
+        try:
+            if isinstance(json_file, dict):
+                for key in json_file.keys():
+                    key_value = json_file.get(key)
+                    if isinstance(key_value, dict):
+                        self.i += 1
+                        self.hJson(key_value)
+                    elif isinstance(key_value, list):
+                        for json_array in key_value:
+                            self.i += 1
+                            self.hJson(json_array)
+                    else:
+                        self.contents.append((str(key)+'_'+str(self.i), str(key_value)))
+            elif isinstance(json_file, list):
+                for json_array in json_file:
+                    self.hJson(json_array)
+        except:
+            print "不是json格式"
+        finally:
+            return self.contents
 
 
 # 读取sqlite数据
 def read_sqlite(db_path, stock):
     conn = sqlite3.connect(db_path)
     cu = conn.cursor()
-    # query_str = "select created_at,clean_data from %s WHERE created_at='1477484688000'" % stock
-    query_str = "select created_at,clean_data from %s" % stock
-    cu.execute(query_str)
-    result = cu.fetchall()
-    comment_result = []
-    # try:
-    for i in xrange(len(result)):
-        time = result[i][0]
-        comments = json.loads(result[i][1].decode('utf-8'))
-        # print comments
-        # res = hJson(comments)
-        print i, time
-        # print len(res)
-        # for i in res:
-        #     print i
-        #
-        # comments = demjson.decode(result[i][1])  # 将字符串使用json格式解码。并将字符中的换行符替换掉。
-        # for item in comments['content']:
-        #     comment = item  # 循环找出json中含有的comment
-        #     if len(comment) < 3000:
-        #         # print time
-        #         # print comment
-        #         # comment_result.append((time, comment))
-        #         comment_result.append(comment)  # 将comment内容提取出来
-    # except:
-    #     print
-    cu.close()
-    conn.close()
-    return comment_result
+    try:
+        # query_str = "select rowid, created_at, clean_data from %s WHERE created_at='1477008928000'" % stock
+        query_str = "select rowid, created_at, clean_data from %s" % stock
+        cu.execute(query_str)
+        result = cu.fetchall()
+        # 数据长度
+        count = len(result)
+        comment_result = []
+        # 逐条数据处理
+        for row in xrange(count):
+            rowid = result[row][0]
+            time = result[row][1]
+            print rowid, time
+            try:
+                comments = json.loads(result[row][2].decode('utf-8'))
+                # 解析json数据，提取其中的评论内容。
+                com = jsonFile()
+                comment_list = com.hJson(comments)
+                # 识别评论内容
+                comment_id = []
+                # string = str('')
+                for i in comment_list:
+                    comment_id.append(i[0])
+                string = " ".join(comment_id)
+                # print string
+                content_index = re.findall(r'content_\d', string)
+                # 提取出所有的评论内容
+                dicts.init()
+                for index in xrange(len(content_index)):
+                    # print content_index[index], sentiment.compute(comment_list[index][1]), comment_list[index][1]
+                    print content_index[index], comment_list[index][1]
+            except:
+                pass
+
+            # comments = demjson.decode(result[i][1])  # 将字符串使用json格式解码。并将字符中的换行符替换掉。
+            # for item in comments['content']:
+            #     comment = item  # 循环找出json中含有的comment
+            #     if len(comment) < 3000:
+            #         # print time
+            #         # print comment
+            #         # comment_result.append((time, comment))
+            #         comment_result.append(comment)  # 将comment内容提取出来
+    except:
+        pass
+    finally:
+        cu.close()
+        conn.close()
 
 
 # 读取本地雪球评论数据

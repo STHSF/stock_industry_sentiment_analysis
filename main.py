@@ -12,41 +12,36 @@ from sentiment_intensity.STP import dicts
 from sentiment_intensity.STP.test import read_data
 from data_prepare import corpus
 
-db_path = "/Users/li/workshop/DataSet/sentiment/xueqiuclear.db"
-db_path = "/Users/li/Downloads/discuss.db"
-stock_list = 'SH6000' + '27'
+# db_path = "/Users/li/workshop/DataSet/sentiment/xueqiuclear.db"
+# db_path = "/Users/li/Downloads/discuss.db"
+db_path = '/Volumes/Macintosh/dataset/stock_sentiment/discussclear.db'
+stock_list = 'SH6000' + '00'
 
 res = read_data.read_sqlite(db_path, stock_list)
 
 # corpus.write_content(res, "/Users/li/workshop/DataSet/test/test.txt")
 
-
-
 #
-# # comment = "这家酒店环境很不错,但是服务差"
+# sentiment_units = "这家酒店环境很好,但是服务差"
 #
 # # 评论切句，构成情感单元
-# sentiment_units = re.split(',|\.|，|。', comment)
+# sentiment_units = re.split('。', sentiment_units)
 #
 # # 对情感单元分词
 # sentiment_units_cut = []
 # for j in sentiment_units:
 #     res = corpus.units_cut(j)
-#
 #     # temp = res.decode("utf8")
 #     res = corpus.filter_stop_word(res)
 #     sentiment_units_cut.append(res)
 #
-#
 # # 情感单元情感强度计算
-#
-# dicts.dict()
+# dicts.init()
 # for i in sentiment_units_cut:
 #
 #     print i
-#     sentiment.compute(i)
-#
-# # 情感单元情感趋势计算
+#     r = sentiment.compute(i)
+#     print r
 
 
 # if __name__ == '__main__':
