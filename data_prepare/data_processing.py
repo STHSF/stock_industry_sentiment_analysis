@@ -61,7 +61,9 @@ def read_source_data(file_path):
         file_content = input_file.readlines()
         temp = []
         for row in file_content:
-            temp.append(row.decode("utf-8").split(","))
+            t = row.split(",")
+            for i in t:
+                temp.append(i)
     return file_content
 
 
@@ -102,6 +104,9 @@ def data_split(pos_file, neu_file, neg_file):
 
 
 def text_clean(corpus):
+    """
+    字符串清理，去除换行符。
+    """
     corpus = [z.lower().strip().replace('\n', ' ').split(',') for z in corpus]
     return corpus
 
@@ -117,6 +122,7 @@ def do():
 
 if __name__ == "__main__":
     # do()
-    re = read_source_data('/Users/li/workshop/DataSet/sentiment/train_op/test.txt')
-    for i in re[1]:
-        print i,
+    re = read_source_data('/Users/li/workshop/DataSet/sentiment/train/test.txt')
+    print type(re[0])
+    for i in re[0]:
+        print i

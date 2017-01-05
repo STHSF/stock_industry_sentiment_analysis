@@ -13,10 +13,12 @@ from sentiment_intensity.STP.test import read_data
 from data_prepare import corpus
 
 db_path = "/Users/li/workshop/DataSet/sentiment/xueqiuclear.db"
-stock_list = 'SH6000' + '08'
+db_path = "/Users/li/Downloads/discuss.db"
+stock_list = 'SH6000' + '27'
 
 res = read_data.read_sqlite(db_path, stock_list)
-corpus.write_content(res, "/Users/li/workshop/DataSet/test/test.txt")
+
+# corpus.write_content(res, "/Users/li/workshop/DataSet/test/test.txt")
 
 
 
