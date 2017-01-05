@@ -47,16 +47,11 @@ class jsonFile(object):
             return self.contents
 
 
-# 读取sqlite数据
-def read_sqlite(db_path, stock):
-    conn = sqlite3.connect(db_path)
-    cu = conn.cursor()
-    try:
-        # query_str = "select rowid, created_at, clean_data from %s WHERE created_at='1477008928000'" % stock
-        query_str = "select rowid, created_at, clean_data from %s" % stock
-        cu.execute(query_str)
-        result = cu.fetchall()
-        # 数据长度
+def comment_exact(result):
+    # 数据长度
+    if not isinstance(result, list):
+        print "数据错误，输入数据不是list格式"
+    else:
         count = len(result)
         comment_result = []
         # 逐条数据处理
@@ -85,19 +80,20 @@ def read_sqlite(db_path, stock):
             except:
                 pass
 
-            # comments = demjson.decode(result[i][1])  # 将字符串使用json格式解码。并将字符中的换行符替换掉。
-            # for item in comments['content']:
-            #     comment = item  # 循环找出json中含有的comment
-            #     if len(comment) < 3000:
-            #         # print time
-            #         # print comment
-            #         # comment_result.append((time, comment))
-            #         comment_result.append(comment)  # 将comment内容提取出来
+
+# 读取sqlite数据
+def read_sqlite(db_path, query_str):
+    conn = sqlite3.connect(db_path)
+    cu = conn.cursor()
+    try:
+        cu.execute(query_str)
+        result = cu.fetchall()
     except:
         pass
     finally:
         cu.close()
         conn.close()
+        return result
 
 
 # 读取本地雪球评论数据
