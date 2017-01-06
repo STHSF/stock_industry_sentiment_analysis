@@ -13,12 +13,10 @@ import re
 import sqlite3
 import demjson
 import json
-from sentiment_intensity.STP import sentiment
-from sentiment_intensity.STP import dicts
+from sentiment_intensity.STP import sentiment, dicts
 
 
 class jsonFile(object):
-
     def __init__(self):
         self.contents = []
         self.i = 0
@@ -47,26 +45,31 @@ class jsonFile(object):
             return self.contents
 
 
-def comment_exact(result):
-    # 数据长度
-    if not isinstance(result, list):
+def comment_exact(temp):
+    """
+    解析从数据库中读取的内容,将数据中的所有评论解析出来,如果出现格式解析错误则返回NULL
+    :param temp:
+    :return:
+    """
+    if not isinstance(temp, list):
         print "数据错误，输入数据不是list格式"
     else:
-        count = len(result)
+        # 数据长度
+        count = len(temp)
+        print "总评论的条数：%s" % count
         comment_result = []
         # 逐条数据处理
         for row in xrange(count):
-            rowid = result[row][0]
-            time = result[row][1]
-            print rowid, time
+            rowid = temp[row][0]
+            time = temp[row][1]
+            # print 'rowid: %s,时间: %d' % (rowid, time)
             try:
-                comments = json.loads(result[row][2].decode('utf-8'))
+                comments = json.loads(temp[row][2].decode('utf-8'))
                 # 解析json数据，提取其中的评论内容。
                 com = jsonFile()
                 comment_list = com.hJson(comments)
                 # 识别评论内容
                 comment_id = []
-                # string = str('')
                 for i in comment_list:
                     comment_id.append(i[0])
                 string = " ".join(comment_id)
@@ -74,26 +77,45 @@ def comment_exact(result):
                 content_index = re.findall(r'content_\d', string)
                 # 提取出所有的评论内容
                 dicts.init()
-                for index in xrange(len(content_index)):
+                res_dic = {}
+                content_index_len = len(content_index)
+                # print "评论的个数：%s" % content_index_len
+                # if content_index_len <= 1:
+                #     res_dic[comment_list[content_index_len-1][0]] = sentiment.compute(comment_list[content_index_len-1][1])
+                #     res_dic[comment_list[content_index_len-1][0]] = comment_list[content_index_len-1][1]
+                # else:
+                for index in xrange(content_index_len):
+                    # 情感强度计算
+                    # res_dic[comment_list[index][0]] = sentiment.compute(comment_list[index][1])
+                    res_dic[comment_list[index][0]] = comment_list[index][1]
                     # print content_index[index], sentiment.compute(comment_list[index][1]), comment_list[index][1]
-                    print content_index[index], comment_list[index][1]
+                    # print comment_list[index][0], comment_list[index][1]
+                comment_result.append(res_dic)
             except:
-                pass
+                comment_result.append({rowid, "NULL"})
+                # print Exception
+        return comment_result
 
 
 # 读取sqlite数据
 def read_sqlite(db_path, query_str):
+    """
+    读取sqlite中的数据
+    :param db_path: .db保存的路径
+    :param query_str: 读取条件
+    :return: list
+    """
     conn = sqlite3.connect(db_path)
     cu = conn.cursor()
     try:
         cu.execute(query_str)
         result = cu.fetchall()
+        return result
     except:
-        pass
+        print '数据库读取错误'
     finally:
         cu.close()
         conn.close()
-        return result
 
 
 # 读取本地雪球评论数据

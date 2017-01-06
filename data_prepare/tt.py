@@ -4,7 +4,7 @@ import sys
 import re
 import sqlite3
 from sentiment_intensity.STP.test import read_data
-
+from sentiment_intensity.STP import sentiment
 reload(sys)
 sys.setdefaultencoding("utf-8")
 
@@ -14,31 +14,8 @@ db_path = '/Volumes/Macintosh/dataset/stock_sentiment/discussclear.db'
 
 contents = []
 
-def hJson(json_file, i=0):
-    # type: (object, object) -> object
-    # 判断传入的是否是json对象，不是json对象就返回异常
-    if isinstance(json_file, dict):
-        for key in json_file.keys():
-            key_value = json_file.get(key)
-            if isinstance(key_value, dict):
-                hJson(key_value, i+1)
-            elif isinstance(key_value, list):
-                for json_array in key_value:
-                    hJson(json_array, i+1)
-            else:
-                contents.append((str(key)+'_'+str(i), str(key_value)))
-    elif isinstance(json_file, list):
-        for json_array in json_file:
-            hJson(json_array, i+1)
-    return contents
-
-comments = json.loads(jso.decode('utf-8'))
-print comments
-a = read_data.jsonFile()
-comment_list = a.hJson(comments)
-# comment_list = read_data.jsonFile.hJson(comments)
-# comment_list = hJson(comments)
-
-print comment_list
-contents = []
-
+index = 2
+i = 1
+while i <= index:
+    print i
+    i += 1
