@@ -40,6 +40,12 @@ def _remove_label(comment):
 
 # 读取sqlite数据
 def read_sqlite(db_path, stock):
+    """
+    读取sqlite中的数据，并且对每条数据进行评论提取
+    :param db_path: 数据库路径
+    :param stock: 表名
+    :return:
+    """
     conn = sqlite3.connect(db_path)
     cu = conn.cursor()
     # query_str = "select created_at,clean_data from %s WHERE created_at='1426662191000'" % stock
@@ -49,8 +55,8 @@ def read_sqlite(db_path, stock):
     # tmp = ['haohaoaho//@呼噜老K: 说的好//@ozrunner:回复@股市狂韭菜: 这些商业常识性的细节被很多人选择性忽视了。
     # 简单说，乐视群企业已经失去了商誉，很多人竟然还当他是个宝，害怕人低价强购，我乐个去啊']
     comment_result = []
-    for i in xrange(len(tmp)):
-        temp = _remove_label(tmp[i])
+    for index in xrange(len(tmp)):
+        temp = _remove_label(tmp[index])
         comments = _comment_extract(temp)
         for j in comments:
             # print j
@@ -60,17 +66,25 @@ def read_sqlite(db_path, stock):
     return comment_result
 
 
-def save2sqlite(db_path, table_name):
+def add_column_sqlite(db_path, table_name, column_name):
+    """
+    数据库添加一个字段，并且每个value的值初始化为rowid
+    :param db_path: 数据库路径
+    :param table_name: 表名
+    :param column_name: 新增字段的名字
+    :return:
+    """
     con = sqlite3.connect(db_path)
     cu = con.cursor()
-    cu.execute("ALTER TABLE %s RENAME TO '_table_copy'" % table_name)
-    cu.execute("CREATE TABLE %s ('Id'  INTEGER PRIMARY KEY AUTOINCREMENT,'Name'  Text);" % table_name)
-    cu.execute("INSERT INTO %s ('Id', 'Name') SELECT 'Id', 'Title' FROM '_table_copy';" % table_name)
-    cu.execute("UPDATE 'sqlite_sequence' SET seq = 3 WHERE name = %s;" % table_name)
-    cu.execute("DROP TABLE '_table_copy';")
-    con.commit()
+    query_str = "select count(*) from %s" % table_name
+    cu.execute(query_str)
+    count = cu.fetchone()[0]
 
-    return 0
+    cu.execute("ALTER TABLE %s ADD %s TEXT" % (table_name, column_name))
+    for k in xrange(count):
+        query_str2 = "update %s set %s = %d WHERE rowid=%d" % (table_name, column_name, k, k)
+        cu.execute(query_str2)
+    con.commit()
 
 
 if __name__ == '__main__':
