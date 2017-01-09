@@ -23,8 +23,8 @@ def get_stock():
 
 def run():
     get_stock()
-    conn = sqlite3.connect(
-        "/home/zhangxin/文档/市场情绪分析/雪球数据/[剔除]data_xueqiu_sentiment_服务器_69.sqlite")
+    db_path = "/home/zhangxin/文档/市场情绪分析/雪球数据/[剔除]data_xueqiu_sentiment_服务器_69.sqlite"
+    conn = sqlite3.connect(db_path)
     cu = conn.cursor()
 
     # 获取所有表名

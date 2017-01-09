@@ -14,11 +14,40 @@ stocks = []
 
 
 def get_stock():
+    """
+    获取股票，导入3000多支股票。
+    :return:
+    """
     stock_path = "/home/zhangxin/work/[上线]文本分类相关/classify_dict/stock_words.words"
     for d in open(stock_path):
         d = d.decode("utf-8").strip("\n").split("\t")
         d = d[1].split(",")
         stocks.append(d[1])
+
+
+def process(content):
+    """
+    对评论内容进行初步的数据预清洗
+    :param content:
+    :return:
+    """
+    global stocks
+    # 如果评论内容的超过300个字符则剔除
+    if len(content) > 300:
+        return False
+    # 如果评论内容中包含url
+    elif content.__contains__("http"):
+        return False
+    # 如果评论中包含超过5支股票的信息
+    num_stocks = 5
+    count = 0
+    for s in stocks:
+        if content.__contains__(s):
+            count += 1
+    if count > num_stocks:
+        return False
+
+    return True
 
 
 def run():
@@ -64,22 +93,6 @@ def run():
         print "   %d / %d = %f" % (count_delete, count_all, float(count_delete) / count_all)
 
 
-def process(content):
-    global stocks
-
-    if len(content) > 300:
-        return False
-    elif content.__contains__("http"):
-        return False
-
-    count = 0
-    for s in stocks:
-        if content.__contains__(s):
-            count += 1
-    if count > 5:
-        return False
-
-    return True
 
 
 if __name__ == '__main__':

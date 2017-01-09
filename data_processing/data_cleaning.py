@@ -35,12 +35,11 @@ def _remove_label(comment):
     html = soup.prettify()
     # 剔除无用的标签、URL信息。
     temp = re.sub(r'(<a.*blank">)|(\n)|(<br />)|(&nbsp;)|(<a.*</a>)|\t|\s|(<img.*/>)|(<.*>)|(' ')', "", html)
-
     return temp
 
 
 # 读取sqlite数据
-def read_sqlite(fdb_path, stock):
+def read_sqlite(db_path, stock):
     conn = sqlite3.connect(db_path)
     cu = conn.cursor()
     # query_str = "select created_at,clean_data from %s WHERE created_at='1426662191000'" % stock
@@ -61,19 +60,28 @@ def read_sqlite(fdb_path, stock):
     return comment_result
 
 
-def save2sqlite():
+def save2sqlite(db_path, table_name):
+    con = sqlite3.connect(db_path)
+    cu = con.cursor()
+    cu.execute("ALTER TABLE %s RENAME TO '_table_copy'" % table_name)
+    cu.execute("CREATE TABLE %s ('Id'  INTEGER PRIMARY KEY AUTOINCREMENT,'Name'  Text);" % table_name)
+    cu.execute("INSERT INTO %s ('Id', 'Name') SELECT 'Id', 'Title' FROM '_table_copy';" % table_name)
+    cu.execute("UPDATE 'sqlite_sequence' SET seq = 3 WHERE name = %s;" % table_name)
+    cu.execute("DROP TABLE '_table_copy';")
+    con.commit()
+
     return 0
 
 
 if __name__ == '__main__':
-    db_path = "/Users/li/workshop/DataSet/sentiment/xueqiuclear.db"
+    database_path = "/Users/li/workshop/DataSet/sentiment/xueqiuclear.db"
     for i in xrange(600):
         try:
             stock_list = 'SZ300%s' % i
             file_path = "/Users/li/workshop/DataSet/test/%s" % stock_list
             print stock_list
             print file_path
-            tmp = read_sqlite(db_path, stock_list)
+            tmp = read_sqlite(database_path, stock_list)
             corpus.write_content(tmp, file_path)
         except sqlite3.OperationalError:
             pass

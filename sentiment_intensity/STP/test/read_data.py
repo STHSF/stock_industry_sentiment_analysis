@@ -16,11 +16,14 @@ from sentiment_intensity.STP import sentiment, dicts
 
 
 class jsonFile(object):
+    """
+    解析json文件，从json中把每个key对应的vlue解析出来，并且每层中key name相同的按照层数标示出来。
+    """
     def __init__(self):
         self.contents = []
         self.i = 0
 
-    def hJson(self, json_file):
+    def json_extract(self, json_file):
         # 判断传入的是否是json对象，不是json对象就返回异常
         try:
             if isinstance(json_file, dict):
@@ -28,23 +31,23 @@ class jsonFile(object):
                     key_value = json_file.get(key)
                     if isinstance(key_value, dict):
                         self.i += 1
-                        self.hJson(key_value)
+                        self.json_extract(key_value)
                     elif isinstance(key_value, list):
                         for json_array in key_value:
                             self.i += 1
-                            self.hJson(json_array)
+                            self.json_extract(json_array)
                     else:
                         self.contents.append((str(key)+'_'+str(self.i), str(key_value)))
             elif isinstance(json_file, list):
                 for json_array in json_file:
-                    self.hJson(json_array)
+                    self.json_extract(json_array)
         except:
-            print "不是json格式"
+            print "不是json格式，请检查正确的json格式。"
         finally:
             return self.contents
 
 
-def comment_exact(temp):
+def comment_extract(temp):
     """
     解析从数据库中读取的内容,将数据中的所有评论解析出来,如果出现格式解析错误则返回NULL
     :param temp:
@@ -67,7 +70,7 @@ def comment_exact(temp):
                 comments = json.loads(comment.decode('utf-8'))
                 # 解析json数据，提取其中的评论内容。
                 com = jsonFile()
-                comment_list = com.hJson(comments)
+                comment_list = com.json_extract(comments)
                 # 识别评论内容,将评论中的所有评论内容（包括转发评论或者回复评论）都提取出来，并保持他们的结构。
                 comment_id = []
                 for i in comment_list:

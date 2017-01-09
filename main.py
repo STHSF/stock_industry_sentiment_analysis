@@ -3,15 +3,15 @@
 # 主函数
 from sentiment_intensity.STP.test import read_data
 
-# db_path = "/Users/li/workshop/DataSet/sentiment/xueqiuclear.db"
-# db_path = "/Users/li/Downloads/discuss.db"
+# database_path = "/Users/li/workshop/DataSet/sentiment/xueqiuclear.db"
+# database_path = "/Users/li/Downloads/discuss.db"
 db_path = '/Volumes/Macintosh/dataset/stock_sentiment/discussclear.db'
 stock_list = 'SH6000' + '00'
 # query_str = "select rowid, created_at, clean_data from %s WHERE created_at='1471484985000'" % stock_list
 query_str = "select rowid, created_at, clean_data from %s" % stock_list
 
 res = read_data.read_sqlite(db_path, query_str)
-rr = read_data.comment_exact(res)
+rr = read_data.comment_extract(res)
 
 print len(rr)
 
