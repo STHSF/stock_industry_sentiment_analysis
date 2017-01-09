@@ -1,5 +1,6 @@
 # coding=utf-8
 """
+数据清洗程序
 解析程序，解析xueqiuclear.db中text里面的评论数据，将每条评论中所有的短评提取出来，没有区分评论是谁写的或者评论发表的时间。
 """
 import re
@@ -74,17 +75,23 @@ def add_column_sqlite(db_path, table_name, column_name):
     :param column_name: 新增字段的名字
     :return:
     """
-    con = sqlite3.connect(db_path)
-    cu = con.cursor()
-    query_str = "select count(*) from %s" % table_name
-    cu.execute(query_str)
-    count = cu.fetchone()[0]
+    try:
+        con = sqlite3.connect(db_path)
+        cu = con.cursor()
+        query_str = "select count(*) from %s" % table_name
+        cu.execute(query_str)
+        count = cu.fetchone()[0]
 
-    cu.execute("ALTER TABLE %s ADD %s TEXT" % (table_name, column_name))
-    for k in xrange(count):
-        query_str2 = "update %s set %s = %d WHERE rowid=%d" % (table_name, column_name, k, k)
-        cu.execute(query_str2)
-    con.commit()
+        cu.execute("ALTER TABLE %s ADD %s TEXT" % (table_name, column_name))
+        for k in xrange(count):
+            query_str2 = "update %s set %s = %d WHERE rowid=%d" % (table_name, column_name, k, k)
+            cu.execute(query_str2)
+        con.commit()
+    except:
+        print "字段增加错误"
+    finally:
+        con.close()
+        cu.close()
 
 
 if __name__ == '__main__':
