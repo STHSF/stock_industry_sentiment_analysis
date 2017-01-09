@@ -1,16 +1,7 @@
 # coding=utf-8
 # -*- coding: <utf-8> -*-
 # 主函数
-import jieba
-import re
-import sqlite3
-import json
-import demjson
-from data_prepare import corpus
-from sentiment_intensity.STP import sentiment
-from sentiment_intensity.STP import dicts
 from sentiment_intensity.STP.test import read_data
-from data_prepare import corpus
 
 # db_path = "/Users/li/workshop/DataSet/sentiment/xueqiuclear.db"
 # db_path = "/Users/li/Downloads/discuss.db"
@@ -21,8 +12,7 @@ query_str = "select rowid, created_at, clean_data from %s" % stock_list
 
 res = read_data.read_sqlite(db_path, query_str)
 rr = read_data.comment_exact(res)
-for i in rr:
-    print i
+
 print len(rr)
 
 # corpus.write_content(res, "/Users/li/workshop/DataSet/test/test.txt")

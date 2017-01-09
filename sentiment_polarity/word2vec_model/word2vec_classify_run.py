@@ -1,14 +1,10 @@
 # coding=utf-8
 from gensim.models import Word2Vec
-from sklearn.preprocessing import scale
 from sklearn.linear_model import SGDClassifier
-from sklearn.metrics import roc_curve, auc
-import matplotlib.pyplot as plt
-import globe
-from data_prepare import data_processing
-import word2vec_gensim_model
-import doc2vec_gensim_train
 
+import doc2vec_gensim_train
+import globe
+from data_processing import data_processing
 
 # 读入数据
 pos_file_path = globe.pos_file_path

@@ -11,7 +11,6 @@
 import jieba
 import re
 import sqlite3
-import demjson
 import json
 from sentiment_intensity.STP import sentiment, dicts
 
@@ -62,39 +61,61 @@ def comment_exact(temp):
         for row in xrange(count):
             rowid = temp[row][0]
             time = temp[row][1]
+            comment = temp[row][2]
             # print 'rowid: %s,时间: %d' % (rowid, time)
             try:
-                comments = json.loads(temp[row][2].decode('utf-8'))
+                comments = json.loads(comment.decode('utf-8'))
                 # 解析json数据，提取其中的评论内容。
                 com = jsonFile()
                 comment_list = com.hJson(comments)
-                # 识别评论内容
+                # 识别评论内容,将评论中的所有评论内容（包括转发评论或者回复评论）都提取出来，并保持他们的结构。
                 comment_id = []
                 for i in comment_list:
                     comment_id.append(i[0])
                 string = " ".join(comment_id)
                 # print string
                 content_index = re.findall(r'content_\d', string)
-                # 提取出所有的评论内容
+                # 提取出所有的评论内容，按照字典格式保存，便于后面的每条评论的逻辑计算。
                 dicts.init()
                 res_dic = {}
+                # 计算小评论的条数
                 content_index_len = len(content_index)
                 # print "评论的个数：%s" % content_index_len
                 # if content_index_len <= 1:
                 #     res_dic[comment_list[content_index_len-1][0]] = sentiment.compute(comment_list[content_index_len-1][1])
                 #     res_dic[comment_list[content_index_len-1][0]] = comment_list[content_index_len-1][1]
                 # else:
+                # 按照字典格式保存所有提取出来的评论。
                 for index in xrange(content_index_len):
                     # 情感强度计算
                     # res_dic[comment_list[index][0]] = sentiment.compute(comment_list[index][1])
                     res_dic[comment_list[index][0]] = comment_list[index][1]
                     # print content_index[index], sentiment.compute(comment_list[index][1]), comment_list[index][1]
                     # print comment_list[index][0], comment_list[index][1]
-                comment_result.append(res_dic)
+                comment_result.append((rowid, res_dic))
             except:
-                comment_result.append({rowid, "NULL"})
+                # 如果评论内容错误或者解析错误，则返回空值
+                comment_result.append((rowid, {"NULL": "NULL"}))
                 # print Exception
         return comment_result
+
+
+def comment_compute(data):
+    comment_result =[]
+    if not isinstance(data, dict):
+        print "数据格式错误，comment_compute"
+    else:
+        index = len(data)
+        if index <= 1:
+            comment_result.append(sentiment.compute(data.values()))
+        else:
+            for key in data.keys():
+                print 0
+
+
+
+        return 0
+
 
 
 # 读取sqlite数据

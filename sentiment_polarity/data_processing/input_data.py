@@ -1,14 +1,15 @@
 # coding=utf-8
 
 import logging
+
 import numpy as np
-from data_prepare import corpus, data_processing
 from gensim.models import Word2Vec
 from tensorflow.contrib.learn.python.learn.datasets import base
-from sentiment_polarity.word2vec_model import doc2vec_gensim_train
-# from sentiment_polarity.data_processing
+
 import globe
-import re
+from data_prepare import data_processing
+from data_processing import corpus
+from sentiment_polarity.word2vec_model import doc2vec_gensim_train
 
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 

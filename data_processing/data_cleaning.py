@@ -2,10 +2,11 @@
 """
 解析程序，解析xueqiuclear.db中text里面的评论数据，将每条评论中所有的短评提取出来，没有区分评论是谁写的或者评论发表的时间。
 """
-import sqlite3
-import demjson
-from BeautifulSoup import BeautifulSoup
 import re
+import sqlite3
+
+from BeautifulSoup import BeautifulSoup
+
 import corpus
 
 

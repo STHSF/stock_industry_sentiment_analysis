@@ -6,12 +6,14 @@
 build word2vec model
 """
 # import modules and logging
-from gensim.models import Word2Vec
-from multiprocessing import cpu_count
-from data_prepare import data_processing
 import logging
-import globe
 import sys
+from multiprocessing import cpu_count
+
+from gensim.models import Word2Vec
+
+import globe
+from data_processing import data_processing
 
 reload(sys)
 sys.setdefaultencoding('utf8')

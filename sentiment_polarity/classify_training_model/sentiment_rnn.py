@@ -4,11 +4,11 @@
 """
 情感极性分析
 """
-from sentiment_polarity.data_processing import input_data
-from data_prepare import data_processing
 import matplotlib.pyplot as plt
 import tensorflow as tf
+
 import globe
+from sentiment_polarity.data_processing import input_data
 
 # set random seed for comparing the two result calculations
 tf.set_random_seed(1)
