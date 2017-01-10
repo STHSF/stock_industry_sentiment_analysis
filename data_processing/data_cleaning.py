@@ -40,24 +40,24 @@ def _remove_label(comment):
 
 
 # 读取sqlite数据
-def read_sqlite(db_path, stock):
+def read_sqlite(db_path, stock_name):
     """
     读取sqlite中的数据，并且对每条数据进行评论提取
     :param db_path: 数据库路径
-    :param stock: 表名
+    :param stock_name: 表名
     :return:
     """
     conn = sqlite3.connect(db_path)
     cu = conn.cursor()
-    # query_str = "select created_at,clean_data from %s WHERE created_at='1426662191000'" % stock
-    query_str = "select text from %s" % stock
+    # query_str = "select created_at,clean_data from %s WHERE created_at='1426662191000'" % stock_name
+    query_str = "select text from %s" % stock_name
     cu.execute(query_str)
-    tmp = cu.fetchall()
+    query_res = cu.fetchall()
     # tmp = ['haohaoaho//@呼噜老K: 说的好//@ozrunner:回复@股市狂韭菜: 这些商业常识性的细节被很多人选择性忽视了。
     # 简单说，乐视群企业已经失去了商誉，很多人竟然还当他是个宝，害怕人低价强购，我乐个去啊']
     comment_result = []
-    for index in xrange(len(tmp)):
-        temp = _remove_label(tmp[index])
+    for index in xrange(len(query_res)):
+        temp = _remove_label(query_res[index])
         comments = _comment_extract(temp)
         for j in comments:
             # print j

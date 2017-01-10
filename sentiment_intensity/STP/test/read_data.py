@@ -83,10 +83,10 @@ def comment_extract(temp):
                 res_dic = {}
                 # 计算小评论的条数
                 content_index_len = len(content_index)
-                # print "评论的个数：%s" % content_index_len
-                # if content_index_len <= 1:
-                #     res_dic[comment_list[content_index_len-1][0]] = sentiment.compute(comment_list[content_index_len-1][1])
-                #     res_dic[comment_list[content_index_len-1][0]] = comment_list[content_index_len-1][1]
+                # print "评论的个数：%s" % content_index_num
+                # if content_index_num <= 1:
+                #     res_dic[comment_list[content_index_num-1][0]] = sentiment.compute(comment_list[content_index_num-1][1])
+                #     res_dic[comment_list[content_index_num-1][0]] = comment_list[content_index_num-1][1]
                 # else:
                 # 按照字典格式保存所有提取出来的评论。
                 for index in xrange(content_index_len):
