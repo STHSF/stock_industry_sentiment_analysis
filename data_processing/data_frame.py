@@ -48,7 +48,7 @@ for i in xrange(len(text)):
             da = comment_list[content_index_num - 1][1]
             if delete_no_use.process(da):
                 res = sentiment.compute(da)
-                print "评论1：%s" % res
+                print "评论中只包含一条短评的结果：%s" % res
                 comment_result.append(str(res))
             else:
                 comment_result.append('NULL_COMMENT')
@@ -76,7 +76,7 @@ for i in xrange(len(text)):
                 score = abs(res_dic['content_0'])
             else:
                 score = - abs(res_dic['content_0'])
-            print "评论2: %s" % score
+            print "评论中包含多条短评的结果: %s" % score
             comment_result.append(str(score))
     except:
         comment_result.append("NULL")
@@ -85,5 +85,7 @@ print len(comment_result)
 
 # dataframe添加一列
 raw_df['clean'] = comment_result
+query_str = ""
+raw_df.to_sql('')
 print raw_df.head(10)
 
