@@ -93,7 +93,5 @@ def run():
         print "   %d / %d = %f" % (count_delete, count_all, float(count_delete) / count_all)
 
 
-
-
 if __name__ == '__main__':
     run()

@@ -1,5 +1,7 @@
 # coding=utf-8
-import pandas as pd
+"""
+使用dataframe格式计算每条评论的情感强度，中间包含了去除无关评论、
+"""
 from pandas.io import sql
 import sqlite3
 import json
@@ -80,12 +82,13 @@ for i in xrange(len(text)):
             comment_result.append(str(score))
     except:
         comment_result.append("NULL")
-
 print len(comment_result)
 
 # dataframe添加一列
 raw_df['clean'] = comment_result
-query_str = ""
-raw_df.to_sql('')
+db_save_path = '/Volumes/Macintosh/dataset/stock_sentiment/discusscleartest.db'
+co = sqlite3.connect(db_save_path)
+raw_df.to_sql(table_name, co, if_exists='replace', index=False)
+co.close()
 print raw_df.head(10)
 

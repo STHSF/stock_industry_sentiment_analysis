@@ -1,7 +1,7 @@
 # coding=utf-8
 """
 数据清洗程序
-解析程序，解析xueqiuclear.db中text里面的评论数据，将每条评论中所有的短评提取出来，没有区分评论是谁写的或者评论发表的时间。
+解析程序，解析xueqiuclear.db中text里面的评论数据，将每条评论中所有的短评提取出来，没有区分评论是谁写的和评论发表的时间。
 """
 import re
 import sqlite3
