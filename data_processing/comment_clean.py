@@ -3,6 +3,7 @@
 将提取出来的所有评论整理，挑选出训练集
 """
 
+
 def read_source_data(file_path):
     """
     读取文本文件.
