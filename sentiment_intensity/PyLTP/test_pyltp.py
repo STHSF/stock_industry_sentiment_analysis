@@ -12,11 +12,23 @@
 from pyltp import Segmentor
 from pyltp import Parser
 
-# segmentor = Segmentor()  # 初始化实例
-# segmentor.load('/home/zhangxin/work/LTP/ltp-models/3.3.1/ltp_data/cws.model')  # 加载模型
-# words = segmentor.segment('元芳你怎么看')  # 分词
-# print ','.join(words)
-# segmentor.release()  # 释放模型
+segmentor = Segmentor()  # 初始化实例
+segmentor.load('/home/zhangxin/work/LTP/ltp-models/3.3.1/ltp_data/cws.model')  # 加载模型
+words = segmentor.segment('，,这个模型效果怎么这样')  # 分词
+words = list(words)
+
+print type(words)
+print ','.join(words)
+segmentor.release()  # 释放模型
+
+
+
+# 测试结巴
+
+import jieba
+words_jieba = jieba.cut('这个模型效果怎么这样')
+print ",".join(list(words_jieba))
+
 
 
 # words = ['我', '爱', '你']
@@ -30,17 +42,17 @@ from pyltp import Parser
 
 
 
-import jieba.posseg as pseg
-
-result = pseg.cut("元芳你怎么看")
-words =[]
-postags = []
-for r in result:
-    words.append(r.word)
-    postags.append(r.flag)
-
-parser = Parser() # 初始化实例
-parser.load('/home/zhangxin/work/LTP/ltp-models/3.3.1/ltp_data/parser.model')  # 加载模型
-arcs = parser.parse(words, postags)  # 句法分析
-print "\t".join("%d:%s" % (arc.head, arc.relation) for arc in arcs)
-parser.release()  # 释放模型
+# import jieba.posseg as pseg
+#
+# result = pseg.cut("元芳你怎么看")
+# words =[]
+# postags = []
+# for r in result:
+#     words.append(r.word)
+#     postags.append(r.flag)
+#
+# parser = Parser() # 初始化实例
+# parser.load('/home/zhangxin/work/LTP/ltp-models/3.3.1/ltp_data/parser.model')  # 加载模型
+# arcs = parser.parse(words, postags)  # 句法分析
+# print "\t".join("%d:%s" % (arc.head, arc.relation) for arc in arcs)
+# parser.release()  # 释放模型

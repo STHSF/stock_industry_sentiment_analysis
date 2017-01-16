@@ -11,7 +11,7 @@
 
 from PyQt4 import QtCore, QtGui
 import sys
-import globe
+import data_processing.data_tag.globe
 from PyQt4.QtGui import QMessageBox
 from functools import partial
 
@@ -43,7 +43,7 @@ class Run_2_content_Form(QtGui.QMainWindow):
 
         # 获取类标
         self.qtext = QtCore.QStringList()
-        for l in globe.labels:
+        for l in data_processing.data_tag.globe.labels:
             print l
             self.qtext.append(unicode(l))
 
@@ -154,7 +154,7 @@ class Run_2_content_Form(QtGui.QMainWindow):
             self.checkLisk.add(self.names[cb].text())
             # 更新状态栏
             self.label_state_text.setText(
-                unicode("[已选/总数]  ") + str(len(self.checkLisk)) + " / " + str(len(globe.docs)))
+                unicode("[已选/总数]  ") + str(len(self.checkLisk)) + " / " + str(len(data_processing.data_tag.globe.docs)))
 
         else:
             try:
@@ -164,29 +164,29 @@ class Run_2_content_Form(QtGui.QMainWindow):
 
             # 更新状态栏
             self.label_state_text.setText(
-                unicode("[已选/总数]  ") + str(len(self.checkLisk)) + " / " + str(len(globe.docs)))
+                unicode("[已选/总数]  ") + str(len(self.checkLisk)) + " / " + str(len(data_processing.data_tag.globe.docs)))
 
     def search(self):
 
         # 初始化
         self.checkLisk.clear()
-        globe.docs = []
-        globe.current_index = 0
+        data_processing.data_tag.globe.docs = []
+        data_processing.data_tag.globe.current_index = 0
 
         key_word = self.kek_word.currentText()
-        globe.current_label = key_word
+        data_processing.data_tag.globe.current_label = key_word
 
         word = self.get_dict(key_word)
 
         for r in word.keys():
             title = r
-            globe.docs.append(title)
+            data_processing.data_tag.globe.docs.append(title)
 
         # 填充复选框
-        if len(globe.docs) > 0:
+        if len(data_processing.data_tag.globe.docs) > 0:
             for i in range(24):
                 cb = "cb" + str(i)
-                self.names[cb].setText(globe.docs[i])
+                self.names[cb].setText(data_processing.data_tag.globe.docs[i])
                 state = self.names[cb].checkState()
                 if state == QtCore.Qt.Checked:
                     self.names[cb].toggle()
@@ -194,61 +194,67 @@ class Run_2_content_Form(QtGui.QMainWindow):
             self.label_state_text.setText("无数据")
 
         # 更新状态栏
-        self.label_state_text.setText(unicode("[已选/总数]  ") + str(len(self.checkLisk)) + " / " + str(len(globe.docs)))
+        self.label_state_text.setText(unicode("[已选/总数]  ") + str(len(self.checkLisk)) + " / " + str(len(
+            data_processing.data_tag.globe.docs)))
         self.label_state_page.setText(
-            unicode("[当页/总页]  ") + str(globe.current_index / 24 + 1) + " / " + str(len(globe.docs) / 24))
-        self.label_state_label.setText(unicode("[当前类别]  ") + globe.current_label)
+            unicode("[当页/总页]  ") + str(data_processing.data_tag.globe.current_index / 24 + 1) + " / " + str(len(
+                data_processing.data_tag.globe.docs) / 24))
+        self.label_state_label.setText(unicode("[当前类别]  ") + data_processing.data_tag.globe.current_label)
 
     # 下一个事件
     def next_event(self):
 
-        if globe.current_index < len(globe.docs):
+        if data_processing.data_tag.globe.current_index < len(data_processing.data_tag.globe.docs):
 
-            globe.current_index += 24
+            data_processing.data_tag.globe.current_index += 24
 
             # 填充复选框
             for i in range(24):
                 cb = "cb" + str(i)
-                self.names[cb].setText(globe.docs[i + globe.current_index])
+                self.names[cb].setText(
+                    data_processing.data_tag.globe.docs[i + data_processing.data_tag.globe.current_index])
                 state = self.names[cb].checkState()
                 if state == QtCore.Qt.Checked:
                     self.names[cb].toggle()
 
             self.label_state_text.setText(
-                unicode("[已选/总数]  ") + str(len(self.checkLisk)) + " / " + str(len(globe.docs)))
+                unicode("[已选/总数]  ") + str(len(self.checkLisk)) + " / " + str(len(data_processing.data_tag.globe.docs)))
             self.label_state_page.setText(
-                unicode("[当页/总页]  ") + str(globe.current_index / 24 + 1) + " / " + str(len(globe.docs) / 24))
-            self.label_state_label.setText(unicode("[当前类别]  ") + globe.current_label)
+                unicode("[当页/总页]  ") + str(data_processing.data_tag.globe.current_index / 24 + 1) + " / " + str(len(
+                    data_processing.data_tag.globe.docs) / 24))
+            self.label_state_label.setText(unicode("[当前类别]  ") + data_processing.data_tag.globe.current_label)
         else:
             self.label_state_reset.setText(unicode("后无数据"))
 
     # 上一个事件
     def last_event(self):
 
-        if globe.current_index >= 24:
+        if data_processing.data_tag.globe.current_index >= 24:
 
-            globe.current_index -= 24
+            data_processing.data_tag.globe.current_index -= 24
 
             # 填充复选框
             for i in range(24):
                 cb = "cb" + str(i)
-                self.names[cb].setText(globe.docs[i + globe.current_index])
+                self.names[cb].setText(
+                    data_processing.data_tag.globe.docs[i + data_processing.data_tag.globe.current_index])
                 state = self.names[cb].checkState()
                 if state == QtCore.Qt.Checked:
                     self.names[cb].toggle()
 
             self.label_state_text.setText(
-                unicode("[已选/总数]  ") + str(len(self.checkLisk)) + " / " + str(len(globe.docs)))
+                unicode("[已选/总数]  ") + str(len(self.checkLisk)) + " / " + str(len(data_processing.data_tag.globe.docs)))
             self.label_state_page.setText(
-                unicode("[当页/总页]  ") + str(globe.current_index / 24 + 1) + " / " + str(len(globe.docs) / 24))
-            self.label_state_label.setText(unicode("[当前类别]  ") + globe.current_label)
+                unicode("[当页/总页]  ") + str(data_processing.data_tag.globe.current_index / 24 + 1) + " / " + str(len(
+                    data_processing.data_tag.globe.docs) / 24))
+            self.label_state_label.setText(unicode("[当前类别]  ") + data_processing.data_tag.globe.current_label)
         else:
             self.label_state_reset.setText(unicode("前无数据"))
 
     # 写出到本地文件
     def write_out(self):
         self.label_state_reset.setText(unicode("正在写"))
-        writer = open(globe.output + self.kek_word.currentText() + "_" + str(len(self.checkLisk)) + ".txt", "wb")
+        writer = open(data_processing.data_tag.globe.output + self.kek_word.currentText() + "_" + str(len(self.checkLisk)) + ".txt", "wb")
         for doc in self.checkLisk:
             writer.write(unicode(doc) + "\n")
         writer.flush()
@@ -279,7 +285,8 @@ class Run_2_content_Form(QtGui.QMainWindow):
 
             # 更新状态栏
             # self.label_state_text.setText("0 / " + str(len(globe.docs)))
-            self.label_state_text.setText(unicode("[已选/总数]  ") + str("0 / " + str(len(globe.docs))))
+            self.label_state_text.setText(unicode("[已选/总数]  ") + str("0 / " + str(len(
+                data_processing.data_tag.globe.docs))))
             self.label_state_reset.setText(unicode("已重置"))
         elif button == cancelButton:
             self.label_state_reset.setText(unicode("已取消"))

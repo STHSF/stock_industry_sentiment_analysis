@@ -5,7 +5,7 @@
 
 # import modules & set up logging
 from sklearn.preprocessing import scale
-from sklearn.model_selection import train_test_split
+# from sklearn.model_selection import train_test_split
 from gensim.models import Word2Vec
 import numpy as np
 import logging
@@ -100,12 +100,34 @@ def doc_vecs_zx(doc, word2vec_model):
 def model_load_test():
     model_path = globe.w2c_model_path
     w2c_model = Word2Vec.load(model_path)
-    cc = w2c_model["中国"]
-    print cc
-    aa = doc_vecs_zx("中国", w2c_model)
-    print aa
 
-    # print '[中国] ', " ".join([word[0] for word in w2c_model.most_similar("中国")])
+    # cc = w2c_model["中国"]
+    # print cc
+    # aa = doc_vecs_zx("中国", w2c_model)
+    # print aa
+
+    vocab = w2c_model.vocab
+    print len(vocab)
+    vocab2 = []
+
+    # count = 0
+    # for v in vocab:
+    #     if v not in vocab2:
+    #         count += 1
+    #         print len(vocab) - count, ":", v
+    #         vocab2.append(v)
+    # print len(vocab2)
+
+    print '[中国] ', " ".join([word[0] for word in w2c_model.most_similar(u"中国")])
+    print '[喜欢] ', " ".join([word[0] for word in w2c_model.most_similar(u"喜欢")])
+    print '[涨] ', " ".join([word[0] for word in w2c_model.most_similar(u"涨")])
+    print '[跌] ', " ".join([word[0] for word in w2c_model.most_similar(u"跌")])
+    print '[日本] ', " ".join([word[0] for word in w2c_model.most_similar(u"日本")])
+    print '[下跌] ', " ".join([word[0] for word in w2c_model.most_similar(u"下跌")])
+    print '[探底] ', " ".join([word[0] for word in w2c_model.most_similar(u"探底")])
+    print '[买入] ', " ".join([word[0] for word in w2c_model.most_similar(u"买入")])
+    print '[卖出] ', " ".join([word[0] for word in w2c_model.most_similar(u"卖出")])
+    print '[猛] ', " ".join([word[0] for word in w2c_model.most_similar(u"猛")])
     # print '[万科] ', " ".join([word[0] for word in w2c_model.most_similar("万科")])
     # print '[猪肉] ', " ".join([word[0] for word in w2c_model.most_similar("猪肉")])
     # print '[股市] ', " ".join([word[0] for word in w2c_model.most_similar("股市")])

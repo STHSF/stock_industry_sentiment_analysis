@@ -6,6 +6,7 @@
 build word2vec model
 """
 # import modules and logging
+from data_processing import data_processing as dprocess
 import logging
 import sys
 from multiprocessing import cpu_count
@@ -47,8 +48,33 @@ def word2vec_test_zx():
     model.save(globe.w2c_model_path)
 
 
-def word2vec_test():
+def word2vec_test_lqj_zx():
+    """
+    输入txt文件，单篇doc占一行
+    :return:
+    """
+    sentence_process = data_processing.MySentences_lqj("/home/zhangxin/文档/市场情绪分析/文献/依存句法/兰秋军/TotalCorpus_w2v_train")
+    n_dim = globe.n_dim
+    min_count = 1
+    model = built_word2vec_model(sentence_process, n_dim, min_count)
+    model.save(globe.w2c_model_path)
 
+
+def word2vec_test_lcm_zx():
+    """
+    输入txt文件，单篇doc占一行
+    :return:
+    """
+    sentence_process = dprocess.MySentences_lcm()
+    n_dim = globe.n_dim
+    min_count = 1
+    # print type(sentence_process)
+    # sentence_process = iter(sentence_process)
+    model = built_word2vec_model(sentence_process, n_dim, min_count)
+    model.save(globe.w2c_model_path)
+
+
+def word2vec_test():
     # 读入数据
     pos_file_path = globe.pos_file_path
     neg_file_path = globe.neg_file_path
@@ -85,6 +111,6 @@ def word2vec_test():
 
 
 if __name__ == "__main__":
-    word2vec_test()
+    word2vec_test_lcm_zx()
 
     # word2vec_test_zx()
