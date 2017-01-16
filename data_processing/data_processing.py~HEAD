@@ -4,12 +4,13 @@
 """生成词向量空间"""
 
 from gensim.models import Word2Vec
-# from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split
 import numpy as np
 import logging
 import os
-import re
+
 import sys
+import re
 
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -65,22 +66,19 @@ class MySentences_lqj(object):
 
 
 import data_json
-from pyltp import Segmentor
+import jieba
 
 
 # 读取雪球评论数据_ 廖成名数据集
 class MySentences_lcm(object):
     def __init__(self):
-        temp = data_json.read_all(20)
+        temp = data_json.read_all(80000)
         self.data = [c.get_content for c in temp]
 
     def __iter__(self):
         # for d in self.data:
         #     dseg = list(jieba.cut(d))
         #     yield dseg
-
-        segmentor = Segmentor()  # 初始化实例
-        segmentor.load('/home/zhangxin/work/LTP/ltp-models/3.3.1/ltp_data/cws.model')  # 加载模型
 
         pattern_stock = '\$.*\$'
         pattern_num = "\d+"
@@ -91,14 +89,7 @@ class MySentences_lcm(object):
             content = content.replace(" ", "").replace("-", "")
             content = re.sub(pattern_stock, ",", content)
             content = re.sub(pattern_num, ",", content)
-
-            print content
-            content = content.encode("gbk")
-            content = u"我是中国人"
-            import chardet
-            print chardet.detect(content)
-            content_seg = segmentor.segment(content)  # 分词
-            b = list(content_seg)
+            b = list(jieba.cut(content))
 
             for bb in b:
                 if bb in char:
@@ -141,22 +132,22 @@ def read_data(pos_file_path, neg_file_path):
     return res
 
 
-# def data_split(pos_file, neu_file, neg_file):
-#     """
-#     数据预处理,设置训练集和测试集的标签, 训练集测试集准备
-#     :param neu_file:
-#     :param pos_file:
-#     :param neg_file:
-#     :return:
-#     """
-#     # 设置标签
-#     label = np.concatenate((np.ones(len(pos_file)), np.zeros(len(neu_file)), 1 + np.ones(len(neg_file))))
-#     # 从训练集中抽取一部分数据作为测试集，即将原始数据分成训练集和测试集两部分。
-#     train_data, test_data, train_labels, test_labels = train_test_split(np.concatenate((pos_file, neu_file, neg_file)),
-#                                                                         label,
-#                                                                         test_size=0.1)
-#     res = (train_data, test_data, train_labels, test_labels)
-#     return res
+def data_split(pos_file, neu_file, neg_file):
+    """
+    数据预处理,设置训练集和测试集的标签, 训练集测试集准备
+    :param neu_file:
+    :param pos_file:
+    :param neg_file:
+    :return:
+    """
+    # 设置标签
+    label = np.concatenate((np.ones(len(pos_file)), np.zeros(len(neu_file)), 1 + np.ones(len(neg_file))))
+    # 从训练集中抽取一部分数据作为测试集，即将原始数据分成训练集和测试集两部分。
+    train_data, test_data, train_labels, test_labels = train_test_split(np.concatenate((pos_file, neu_file, neg_file)),
+                                                                        label,
+                                                                        test_size=0.1)
+    res = (train_data, test_data, train_labels, test_labels)
+    return res
 
 
 def text_clean(corpus):
@@ -176,9 +167,37 @@ def do():
         count += 1
 
 
+def process_lcm():
+    a = data_json.read_all(5)
+    pattern_stock = '\$.*\$'
+    pattern_num = "\d+"
+
+    char = {u"，", u"：", u"？", u",", u".", u"!", u"！", u"、", u',',
+            "%", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0"}
+    for aa in a:
+        content = aa.get_content
+        content = content.replace(" ", "")
+        content = re.sub(pattern_stock, ",", content)
+        content = re.sub(pattern_num, ",", content)
+        b = list(jieba.cut(content))
+
+        for bb in b:
+            if bb in char:
+                b.remove(bb)
+
+                # print "\n", content
+
+        if len(b) > 0:
+            print b
+            print "[SEG]", ",".join(b)
+
+    return b
+
+
 if __name__ == "__main__":
     # do()
-    re = read_source_data('/Users/li/workshop/DataSet/sentiment/train/test.txt')
-    print type(re[0])
-    for i in re[0]:
-        print i
+    # re = read_source_data('/Users/li/workshop/DataSet/sentiment/train/test.txt')
+    # print type(re[0])
+    # for i in re[0]:
+    #     print i
+    process_lcm()

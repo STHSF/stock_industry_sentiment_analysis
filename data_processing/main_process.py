@@ -8,7 +8,7 @@
 # File: main.py
 # Time: 16-11-24 上午9:55
 # -------------------------------------------
-import read_data
+import data_json
 import timestamp
 import jieba
 import dict
@@ -20,7 +20,7 @@ sys.setdefaultencoding('utf8')
 
 # 找出股票[H600537]相关的评论
 def test_SH600537():
-    data_all_map = read_data.read_all_map()
+    data_all_map = data_json.read_all_map()
     print "[总共股票] ", len(data_all_map)
     temp_sh600537 = data_all_map["SH600537"]
     print "[SH600537]"
@@ -38,7 +38,7 @@ def find_dict():
     neg_word = {}
 
     print "[正在读取数据]...."
-    data_all = read_data.read_all(2)
+    data_all = data_json.read_all(2)
 
     zhi_pos, zhi_neg = dict.get_dict()
 
@@ -78,7 +78,7 @@ def find_deg():
     conment_dict = {}
 
     print "[正在读取数据]...."
-    data_all = read_data.read_all(1000)
+    data_all = data_json.read_all(1000)
 
     deg_dict = dict.get_dict_deg()
     #
